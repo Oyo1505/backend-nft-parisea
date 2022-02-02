@@ -7,7 +7,7 @@ const nfts = [
     title: "Test",
     description: "une description",
     cid: "x02ds2q1d2qd1",
-
+    token_id: 1,
     category: "Dog",
   },
 
@@ -22,7 +22,7 @@ const nfts = [
     title: "Test 3",
     description: "une description 3",
     cid: "x02ds2q1d2qd1",
-
+    token_id: 3,
     category: "cat",
   },
 ];
