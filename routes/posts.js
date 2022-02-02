@@ -3,7 +3,7 @@ const postModel = require("../models/Post.model");
 const uploader = require("../config/cloudinary");
 
 // DISPLAY ALL
-router.get("/posts", async (req, res) => {
+router.get("/posts", async (req, res, next) => {
   try {
     const posts = await postModel.find();
     res.status(200).json(posts);
@@ -13,7 +13,7 @@ router.get("/posts", async (req, res) => {
 });
 
 // CREATE - POST
-router.post("/posts/create"),
+router.post("/posts"),
   uploader.single("image"),
   async (req, res, next) => {
     const image = req.file?.path || undefined;

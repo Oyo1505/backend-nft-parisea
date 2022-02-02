@@ -9,4 +9,5 @@ const postSchema = new Schema({
   postedTime: { type: Date, default: Date.now() },
 });
 
-module.exports = model("post", postSchema);
+const postModel = model("post", postSchema);
+module.exports = postModel;
