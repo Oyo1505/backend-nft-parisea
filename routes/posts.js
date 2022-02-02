@@ -4,6 +4,7 @@ const uploader = require("../config/cloudinary");
 
 // DISPLAY ALL
 router.get("/posts", async (req, res, next) => {
+  console.log("WORKING?");
   try {
     const posts = await postModel.find();
     res.status(200).json(posts);
