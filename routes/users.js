@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userModel = require("../models/user");
-const uploader = require("../config/cloudinary ");
+const uploader = require("../config/cloudinary");
 
 // DISPLAY USERS
 router.get("/users", async (req, res, next) => {
@@ -22,15 +22,14 @@ router.get("/users/:id", async (req, res, next) => {
     next(e);
   }
 }),
-
-// EDIT USER
-router.post("/users/edit/:id"),
+  // EDIT USER
+  router.post("/users/edit/:id"),
   uploader.single("image"),
   uploader.single("coverImage"),
   async (req, res, next) => {
     try {
-      const {id} = req.params;
-      const {image, coverImage, name, userName, email, bio }
+      const { id } = req.params;
+      const { image, coverImage, name, userName, email, bio } = req.body;
       let newImage;
       if (req.file) {
         newImage = req.file.path;
@@ -56,7 +55,7 @@ router.post("/users/edit/:id"),
     }
   };
 
-  // DELETE
+// DELETE
 router.get("/users/:id", async (req, res) => {
   try {
     const userDelete = await userModel.findByIdAndDelete(req.params.id);
