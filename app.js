@@ -39,6 +39,7 @@ app.get("/", (req, res) => {
 // ----
 const usersRouter = require("./routes/users");
 app.use("/", usersRouter);
+app.use("/", require("./routes/posts"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

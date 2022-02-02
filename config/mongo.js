@@ -1,5 +1,6 @@
-require("dotenv");
+require("dotenv").config();
 const mongoose = require("mongoose");
+console.log(process.env.MONGO_URI);
 // hey express, i would like to use mongoose to get a connection to my mongodb server
 mongoose
   .connect(process.env.MONGO_URI)
