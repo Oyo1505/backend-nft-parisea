@@ -38,8 +38,9 @@ app.get("/", (req, res) => {
 // ROUTES
 // ----
 const usersRouter = require("./routes/users");
+const nftsRouter = require("./routes/users");
 app.use("/", usersRouter);
-
+app.use("/", nftsRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
