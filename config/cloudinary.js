@@ -10,7 +10,7 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  folder: "artistify",
+  folder: "NFTs",
   //  params below is only needed if uploading media types other than images (video, audio...)
   // params: {
   //     ressource_type: "raw"
