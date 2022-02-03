@@ -25,7 +25,6 @@ router.post("/nfts", async (req, res, next) => {
 router.get("/nfts/:id", async (req, res, next) => {
   try {
     const nft = await nftModel.findById(req.params.id);
-  console.log(nft)
     res.status(200).json(nft);
   } catch (e) {
     next(e);
@@ -33,12 +32,13 @@ router.get("/nfts/:id", async (req, res, next) => {
 });
 
 //update
-router.patch("nfts/delete/:id", async (req, res, next) => {
+router.patch("/nfts/:id", async (req, res, next) => {
+  console.log("updatge")
   try {
     const nft = await nftModel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
-    res.status;
+    res.status(200).json(nft);
   } catch (e) {
     next(e);
   }
