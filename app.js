@@ -7,6 +7,7 @@ const session = require("express-session"); //sessions make data persist between
 var app = express();
 const cors = require("cors");
 app.use(express.json());
+
 /*
 Create a session middleware with the given options.
 Note:  Session data is not saved in the cookie itself, just the session ID. 
@@ -39,9 +40,13 @@ app.get("/", (req, res) => {
 // ----
 const usersRouter = require("./routes/users");
 const nftsRouter = require("./routes/users");
-app.use("/", usersRouter);
+const loginRouter = require("./routes/auth");
 app.use("/", nftsRouter);
 app.use("/", require("./routes/posts"));
+
+
+app.use("/", usersRouter);
+app.use("/", loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -56,6 +61,10 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
+<<<<<<< HEAD
+=======
+  // res.render("error");
+>>>>>>> 5010e098553a2ccbe8b605394ef9d3fc3543ca9b
 });
 
 module.exports = app;
