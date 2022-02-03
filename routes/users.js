@@ -21,14 +21,27 @@ router.get("/users/:id", async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-}),
-  // EDIT USER
-  router.post("/users/edit/:id"),
+});
+
+router.get("/users/edit/:id", async (req, res, next) => {
+  try {
+    const singleUser = await userModel.findById(req.params.id);
+    console.log(singleUser);
+    res.status(200).json(singleUser);
+  } catch (e) {
+    next(e);
+  }
+});
+
+// EDIT USER
+router.patch(
+  "/users/edit/:id",
   uploader.single("image"),
   uploader.single("coverImage"),
   async (req, res, next) => {
     try {
       const { id } = req.params;
+
       const { image, coverImage, name, userName, email, bio } = req.body;
       let newImage;
       if (req.file) {
@@ -36,7 +49,7 @@ router.get("/users/:id", async (req, res, next) => {
       } else {
         newImage = image;
       }
-
+      console.log(req.body);
       const editUser = await userModel.findByIdAndUpdate(
         id,
         {
@@ -49,11 +62,13 @@ router.get("/users/:id", async (req, res, next) => {
         },
         { new: true }
       );
+      console.log("ko", editUser);
       res.status(200).json(editUser);
     } catch (e) {
       next(e);
     }
-  };
+  }
+);
 
 // DELETE
 router.get("/users/:id", async (req, res) => {

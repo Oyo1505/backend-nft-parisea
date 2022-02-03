@@ -18,8 +18,13 @@ const userSchema = new Schema({
   name: {
     type: String,
     required: true,
+    default: "undifined",
   },
-  userName: String,
+  userName: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   email: {
     type: String,
     unique: true,
