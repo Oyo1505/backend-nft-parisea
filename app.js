@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 // ROUTES
 // ----
 const usersRouter = require("./routes/users");
-const nftsRouter = require("./routes/users");
+const nftsRouter = require("./routes/nfts");
 app.use("/", usersRouter);
 app.use("/", nftsRouter);
 app.use("/", require("./routes/posts"));
@@ -56,7 +56,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+
 });
 
 module.exports = app;

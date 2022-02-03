@@ -1,11 +1,11 @@
-var express = require("express");
-var router = express.Router();
+const router = require("express").Router();
 const nftModel = require("../models/Nft");
 
 //return all nfts
 router.get("/nfts", async (req, res, next) => {
   try {
     const nfts = await nftModel.find();
+    console.log(nfts)
     res.status(200).json(nfts);
   } catch (e) {
     next(e);
@@ -25,6 +25,7 @@ router.post("/nfts", async (req, res, next) => {
 router.get("/nfts/:id", async (req, res, next) => {
   try {
     const nft = await nftModel.findById(req.params.id);
+  console.log(nft)
     res.status(200).json(nft);
   } catch (e) {
     next(e);
@@ -53,3 +54,4 @@ router.get("/nfts/delete/:id", async (req, res, next) => {
     next(e);
   }
 });
+module.exports = router;
