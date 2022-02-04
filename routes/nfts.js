@@ -13,7 +13,7 @@ router.get("/nfts", async (req, res, next) => {
   }
 });
 
-router.post("/nfts", uploader("image"), async (req, res, next) => {
+router.post("/nfts", uploader.single("image"), async (req, res, next) => {
   try {
     if (req.file) {
       const res = await nftModel.create({
