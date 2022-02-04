@@ -17,12 +17,10 @@ const userSchema = new Schema({
   },
   name: {
     type: String,
-    required: true,
     default: "undifined",
   },
   userName: {
     type: String,
-    required: true,
     unique: true,
   },
   email: {
