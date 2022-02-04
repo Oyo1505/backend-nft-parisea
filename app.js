@@ -40,7 +40,11 @@ app.get("/", (req, res) => {
 // ----
 const usersRouter = require("./routes/users");
 const nftsRouter = require("./routes/nfts");
+<<<<<<< HEAD
 const loginRouter = require("./routes/auth");
+=======
+app.use("/", usersRouter);
+>>>>>>> 594b5e00d3ea332aeee8dfa6e226f8b879558d55
 app.use("/", nftsRouter);
 app.use("/", require("./routes/posts"));
 
@@ -60,6 +64,10 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 594b5e00d3ea332aeee8dfa6e226f8b879558d55
 });
 
 module.exports = app;
