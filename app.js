@@ -39,11 +39,10 @@ app.get("/", (req, res) => {
 // ROUTES
 // ----
 const usersRouter = require("./routes/users");
-const nftsRouter = require("./routes/users");
+const nftsRouter = require("./routes/nfts");
 const loginRouter = require("./routes/auth");
 app.use("/", nftsRouter);
 app.use("/", require("./routes/posts"));
-
 
 app.use("/", usersRouter);
 app.use("/", loginRouter);
@@ -61,10 +60,6 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-<<<<<<< HEAD
-=======
-  // res.render("error");
->>>>>>> 5010e098553a2ccbe8b605394ef9d3fc3543ca9b
 });
 
 module.exports = app;

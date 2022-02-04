@@ -6,8 +6,7 @@
     "start": "node ./bin/www",
     "seed:nfts": "node ./bin/seeds/nft.seed.js",
     "dev": "nodemon ./bin/www",
-    "seed:post": "node ./bin/seeds/post.js"
-    "dev": "nodemon ./bin/www",
+    "seed:post": "node ./bin/seeds/post.js",
     "seed:user": "node ./bin/seeds/user.js"
   },
   "dependencies": {

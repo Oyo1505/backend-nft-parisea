@@ -3,8 +3,10 @@ const { model, Schema } = require("mongoose");
 const nftSchema = new Schema({
   title: String,
   description: String,
-  token_id: { type: Number },
-  cid: String,
+  image: { type: String, require: true },
+  seller: { type: Schema.Types.ObjectId, refs: "user" },
+  owner: { type: Schema.Types.ObjectId, refs: "user" },
+  price: { type: Number, required: true },
   user_id: { type: Schema.Types.ObjectId, refs: "user" },
   category: String,
 });
