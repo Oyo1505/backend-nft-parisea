@@ -69,6 +69,10 @@ const userSchema = new Schema({
     },
   ],
   bio: String,
+  balance: {
+    type: Number,
+    required: true,
+  },
 });
 
 const userModel = mongoose.model("user", userSchema);

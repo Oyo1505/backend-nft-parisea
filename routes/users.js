@@ -36,9 +36,17 @@ router.get("/users/edit/:id", async (req, res, next) => {
 // EDIT USER
 router.patch(
   "/users/edit/:id",
-  uploader.single("image"),
-  uploader.single("coverImage"),
+  uploader.fields([
+    {
+      name: "image",
+    },
+    {
+      name: "coverImage",
+    },
+  ]),
   async (req, res, next) => {
+    console.log("req file >>>>>>>>>>>>", req.files);
+    console.log("req body >>>>>>>>>>>>", req.body);
     try {
       const { id } = req.params;
 
@@ -49,7 +57,6 @@ router.patch(
       } else {
         newImage = image;
       }
-      console.log(req.body);
       const editUser = await userModel.findByIdAndUpdate(
         id,
         {

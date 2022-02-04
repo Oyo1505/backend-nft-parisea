@@ -15,7 +15,7 @@ router.post("/connect-wallet/:id", async (req, res, next) => {
   console.log("hellooo");
   try {
     const newUser = { ...req.body };
-    const foundUser = await userModel.find({
+    const foundUser = await userModel.findOne({
       id_metamask: req.params.id,
     });
 
