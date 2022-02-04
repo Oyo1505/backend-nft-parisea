@@ -2,25 +2,11 @@ require("dotenv").config();
 require("./config/mongo");
 var createError = require("http-errors");
 var express = require("express");
-var path = require("path");
-const session = require("express-session"); //sessions make data persist between http calls
 var app = express();
 const cors = require("cors");
 app.use(express.json());
 
-/*
-Create a session middleware with the given options.
-Note:  Session data is not saved in the cookie itself, just the session ID. 
-Session data is stored server-side.
-*/
-// app.use(
-//   session({
-//     cookie: { secure: false, maxAge: 4 * 60 * 60 * 1000 }, // 4 hours
-//     resave: true,
-//     saveUninitialized: true,
-//     secret: process.env.SECRET_SESSION,
-//   })
-// );
+
 
 const corsOptions = {
   origin: [process.env.CLIENT_URL],
@@ -28,7 +14,10 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200,
 };
+//? Services like heroku use something called a proxy and you need to add this to your server
+app.set("trust proxy", 1);
 
+app.use(express.urlencoded({ extended: false }));
 // cors middle on
 app.use(cors(corsOptions));
 //BACK END
@@ -39,7 +28,10 @@ app.get("/", (req, res) => {
 // ROUTES
 // ----
 const usersRouter = require("./routes/users");
+const nftsRouter = require("./routes/nfts");
 const loginRouter = require("./routes/auth");
+app.use("/", nftsRouter);
+app.use("/", require("./routes/posts"));
 
 app.use("/", usersRouter);
 app.use("/", loginRouter);
@@ -57,7 +49,6 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  // res.render("error");
 });
 
 module.exports = app;
