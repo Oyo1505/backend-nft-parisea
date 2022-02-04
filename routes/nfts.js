@@ -26,7 +26,7 @@ router.post("/nfts/create-item", uploader.single("image"), async (req, res, next
   }
 });
 
-//return On nft
+//return Single nft
 router.get("/nfts/:id", async (req, res, next) => {
   try {
     const nft = await nftModel.findById(req.params.id);
@@ -35,7 +35,16 @@ router.get("/nfts/:id", async (req, res, next) => {
     next(e);
   }
 });
-
+//return NFTs created, owened,  by the current user 
+router.get("/nfts/:spec/:id", async (req, res, next) => {
+  const spec = req.params.spec
+  try {
+    const nft = await nftModel.find({ spec : req.params.id});
+    res.status(200).json(nft);
+  } catch (e) {
+    next(e);
+  }
+});
 //update
 router.patch("/nfts-edit/:id", async (req, res, next) => {
   try {
