@@ -45,8 +45,6 @@ router.patch(
     },
   ]),
   async (req, res, next) => {
-    console.log("req file >>>>>>>>>>>>", req.files);
-    console.log("req body >>>>>>>>>>>>", req.body);
     try {
       const { id } = req.params;
 

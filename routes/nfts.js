@@ -6,7 +6,6 @@ const uploader = require("../config/cloudinary");
 router.get("/nfts", async (req, res, next) => {
   try {
     const nfts = await nftModel.find();
-    console.log(nfts);
     res.status(200).json(nfts);
   } catch (e) {
     next(e);
@@ -21,7 +20,6 @@ router.post("/nfts/create-item", uploader.single("image"), async (req, res, next
       const nft = await nftModel.create({
         ...req.body, image
       });
-      console.log(nft)
       res.status(200).json(nft);
   } catch (e) {
     next(e);
@@ -53,7 +51,7 @@ router.patch("/nfts-edit/:id", async (req, res, next) => {
 
 //delete nfts
 
-router.get("/nfts/delete/:id", async (req, res, next) => {
+router.post("/nfts/delete/:id", async (req, res, next) => {
   try {
     const nft = await nftModel.findByIdAndDelete(req.params.id);
     res.status(200).json(nft);
