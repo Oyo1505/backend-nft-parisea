@@ -47,8 +47,25 @@ router.patch(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-
-      const { image, coverImage, name, userName, email, bio } = req.body;
+      console.log("BOOODY", req.body);
+      const {
+        image,
+        coverImage,
+        name,
+        userName,
+        email,
+        bio,
+        following,
+        follower,
+        twitter,
+        facebook,
+        instagram,
+        posts,
+        nfts_ids_created,
+        nfts_ids_owned,
+        whishlist,
+        balance,
+      } = req.body;
       let newImage;
       if (req.file) {
         newImage = req.file.path;
@@ -64,6 +81,16 @@ router.patch(
           userName,
           email,
           bio,
+          following,
+          follower,
+          twitter,
+          facebook,
+          instagram,
+          posts,
+          nfts_ids_created,
+          nfts_ids_owned,
+          whishlist,
+          balance,
         },
         { new: true }
       );
