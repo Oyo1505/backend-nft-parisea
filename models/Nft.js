@@ -7,7 +7,7 @@ const nftSchema = new Schema({
   seller: { type: Schema.Types.ObjectId, refs: "user" },
   owner: { type: Schema.Types.ObjectId, refs: "user" },
   price: { type: Number, required: true },
-  user_id: { type: Schema.Types.ObjectId, refs: "user" },
+  creator: { type: Schema.Types.ObjectId, refs: "user" },
   category: String,
 });
 
