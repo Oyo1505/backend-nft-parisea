@@ -3,9 +3,9 @@ const router = express.Router();
 const userModel = require("../models/user");
 
 router.get("/connect-wallet/:id", async (req, res, next) => {
-  //   console.log("YO");
   try {
     const user = await userModel.find({ id_metamask: req.params.id });
+    res.status(200).json(user)
   } catch (e) {
     next(e);
   }
