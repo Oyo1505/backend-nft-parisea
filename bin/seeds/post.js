@@ -43,7 +43,7 @@ const posts = [
   try {
     await postModel.deleteMany();
     const postsCreated = await postModel.insertMany(posts);
-    // console.log("Posts are created >>", postsCreated);
+    console.log("Posts are created >>", postsCreated);
     process.exit();
   } catch (error) {
     console.error(error);
