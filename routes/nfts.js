@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const nftModel = require("../models/Nft");
 const uploader = require("../config/cloudinary");
-const cloudinary = require("cloudinary");
+
 //return all nfts
 router.get("/nfts", async (req, res, next) => {
   try {
@@ -13,20 +13,16 @@ router.get("/nfts", async (req, res, next) => {
   }
 });
 
-router.post("/nfts", uploader("image"), async (req, res, next) => {
+router.post("/nfts/create-item", uploader.single("image"), async (req, res, next) => {
+ 
+  const image = req.file?.path || undefined;
   try {
-    if (req.file) {
-      const res = await nftModel.create({
-        title: req.body.title,
-        description: req.body.description,
-        image: req.file.path,
-        price: req.body.price,
-        seller: req.body.owner,
-        creator: req.body.creator,
+    
+      const nft = await nftModel.create({
+        ...req.body, image
       });
-
-      res.status(200).json(res);
-    }
+      console.log(nft)
+      res.status(200).json(nft);
   } catch (e) {
     next(e);
   }
