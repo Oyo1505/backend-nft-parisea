@@ -7,8 +7,9 @@
     "dev": "nodemon ./bin/www",
     "seed:nfts": "node ./bin/seeds/nft.seed.js",
     "seed:post": "node ./bin/seeds/post.js",
+    "seed:comment": "node ./bin/seeds/comment.js",
     "seed:user": "node ./bin/seeds/user.js",
-    "seed:all": "node ./bin/seeds/nft.seed.js && node ./bin/seeds/post.js && node ./bin/seeds/user.js"
+    "seed:all": "node ./bin/seeds/nft.seed.js && node ./bin/seeds/post.js && node ./bin/seeds/comment.js && node ./bin/seeds/user.js"
   },
   "dependencies": {
     "cloudinary": "^1.28.1",

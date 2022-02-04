@@ -2,10 +2,10 @@ const router = require("express").Router();
 const postModel = require("../models/Post.model");
 const uploader = require("../config/cloudinary");
 
-// DISPLAY ALL
+// DISPLAY ALL POSTS
 router.get("/posts", async (req, res) => {
   try {
-    const posts = await postModel.find();
+    const posts = await postModel.find().populate("userId");
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
@@ -33,9 +33,9 @@ router.post(
 
 // UPDATE - GET
 router.get("/posts/:id", async (req, res) => {
-  // console.log("req.params.id : >>>>>", req.params.id);
+  console.log("req.params.id : >>>>>", req.params.id);
   try {
-    const onePost = await postModel.findById(req.params.id);
+    const onePost = await postModel.findById(req.params.id).populate("userId");
     res.status(200).json(onePost);
   } catch (error) {
     console.error(error);
@@ -60,7 +60,7 @@ router.patch("/posts/:id", uploader.single("image"), async (req, res, next) => {
     const updatedPost = await postModel.findByIdAndUpdate(
       req.params.id,
       {
-        userId,
+        // userId,
         userName,
         userPfp,
         description,
