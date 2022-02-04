@@ -13,11 +13,12 @@ const userSchema = new Schema({
   },
   id_metamask: {
     type: String,
+    unique:true,
     required: true,
   },
   name: {
     type: String,
-    default: "undifined",
+    default: "undefined",
   },
   userName: {
     type: String,
