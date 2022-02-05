@@ -12,6 +12,40 @@ router.get("/nfts", async (req, res, next) => {
     next(e);
   }
 });
+//get a random NFT
+router.get("/random-nft", async (req, res, next) => {
+  try {
+    const nfts = await nftModel.find();
+    let randomNumder = Math.floor(Math.random() * nfts.length);
+    const nft = await nftModel
+      .findById(nfts[randomNumder]._id)
+      .populate("creator");
+    res.status(200).json(nft);
+  } catch (e) {
+    next(e);
+  }
+});
+//return list of NFTs owned and created from the user
+router.get("/list-nfts/:mode/:id", async (req, res, next) => {
+  console.log(req.params.mode, req.params.id);
+  const { mode, id } = req.params;
+  try {
+    const nfts = await nftModel.find({ [mode]: id });
+    res.status(200).json(nfts);
+  } catch (e) {
+    next(e);
+  }
+});
+//return only nft to sold
+router.get("/nfts-sold", async (req, res, next) => {
+  try {
+    const nfts = await nftModel.find({ sold: true });
+    res.status(200).json(nfts);
+  } catch (e) {
+    next(e);
+  }
+});
+
 //Resell NFT
 router.patch("/resell-nft/:id", async (req, res, next) => {
   try {
@@ -20,7 +54,6 @@ router.patch("/resell-nft/:id", async (req, res, next) => {
       { sold: false },
       { new: true }
     );
-    console.log(nft);
     res.status(200).json(nft);
   } catch (e) {
     next(e);

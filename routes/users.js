@@ -70,6 +70,7 @@ router.patch(
       } else {
         newImage = image;
       }
+
       const editUser = await userModel.findByIdAndUpdate(
         id,
         {
@@ -92,7 +93,7 @@ router.patch(
         },
         { new: true }
       );
-      console.log("ko", editUser);
+      console.log("ko");
       res.status(200).json(editUser);
     } catch (e) {
       next(e);
