@@ -26,7 +26,6 @@ router.get("/users/:id", async (req, res, next) => {
 router.get("/users/edit/:id", async (req, res, next) => {
   try {
     const singleUser = await userModel.findById(req.params.id);
-    console.log(singleUser);
     res.status(200).json(singleUser);
   } catch (e) {
     next(e);
@@ -47,7 +46,6 @@ router.patch(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      console.log("BOOODY", req.body);
       const {
         image,
         coverImage,

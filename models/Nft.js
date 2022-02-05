@@ -9,7 +9,7 @@ const nftSchema = new Schema({
   price: { type: Number, required: true },
   creator: { type: Schema.Types.ObjectId, refs: "user" },
   category: String,
-  sold: Boolean,
+  sold: { type: Boolean, default: false },
 });
 
 const nftModel = model("nft", nftSchema);
