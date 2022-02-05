@@ -7,14 +7,14 @@ const postSchema = new Schema({
   image: { type: String, required: true },
   description: String,
   postedTime: { type: Date, default: Date.now() },
-  likes: [{ type: Schema.Types.ObjectId, ref: "user" }],
+  // likes: [{ type: Schema.Types.ObjectId, ref: "user" }],
   comments: [
     {
-      commentUserID: {
+      userId: {
         type: Schema.Types.ObjectId,
         ref: "user",
       },
-      commentText: {
+      comment: {
         type: String,
       },
     },

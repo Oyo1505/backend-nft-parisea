@@ -1,7 +1,9 @@
 const router = require("express").Router();
 const postModel = require("../models/Post.model");
 const userModel = require("../models/user");
+const commentModel = require("../models/Comment.model")
 const uploader = require("../config/cloudinary");
+const { Types } = require("mongoose");
 
 // DISPLAY ALL POSTS
 router.get("/posts", async (req, res) => {
@@ -90,29 +92,32 @@ router.post("/posts/delete/:id", async (req, res) => {
 // ⬇︎⬇︎⬇︎⬇︎⬇︎　COMMENT ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
 
 // GET - COMMENT
-router.get("/comments", async (req, res, next) => {
-  try {
-    const commentedUserId = await postModel.findById(req.params.id);
-    res.status(200).json(commentedUserId.comment.length);
-  } catch (error) {
-    next(error);
-  }
-});
+// router.get("/comments", async (req, res, next) => {
+//   try {
+//     const commentedUserId = await postModel.findById(req.params.id);
+//     res.status(200).json(commentedUserId.comment.length);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 // CREATE&UPDATE - COMMENT
-router.patch("/comments", async (req, res, next) => {
+router.patch("/posts/:id/comments", async (req, res, next) => {
   console.log("req.body : >>>>>", req.body);
   try {
-    const createdComment = await postModel.findByIdAndUpdate(
-      req.body.commentUserID,
+    const updqtedPost = await postModel.findByIdAndUpdate(
+      req.params.id,
       {
-        $push: { comments: [{ $each: idUser }, { $each: commentText }] },
-      },
+        $push: {
+          comments: {comment: req.body.comment,
+            userId: Types.ObjectId(req.body.userId)
+        },
+      }},
       { new: true }
     );
-    res.status(201).json(createdComment);
+    res.status(201).json(updqtedPost);
   } catch (error) {
-    console.log("bad way");
+    console.log("Wrong way", error);
     next(error);
   }
 });
