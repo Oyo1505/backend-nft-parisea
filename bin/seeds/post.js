@@ -14,7 +14,34 @@ const posts = [
     description: "I got my first NFT, yayyy! ",
     postedTime: "2022-02-02",
     likes: null,
+    comments: [
+      {
+        // userId: "",
+        userName: "cc",
+        userPfp:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlvCJ44jSvkr8W9bYID4eqPeoJctZjBULPDg&usqp=CAU",
+        comment: "Wowww",
+        commentedTime: "2022-02-05",
+      },
+      {
+        // userId: "",
+        userName: "bb",
+        userPfp:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlvCJ44jSvkr8W9bYID4eqPeoJctZjBULPDg&usqp=CAU",
+        comment: "222",
+        commentedTime: "2022-02-05",
+      },
+      {
+        // userId: "",
+        userName: "aa",
+        userPfp:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlvCJ44jSvkr8W9bYID4eqPeoJctZjBULPDg&usqp=CAU",
+        comment: "33333",
+        commentedTime: "2022-02-05",
+      },
+    ],
   },
+
   {
     // userId: "",
     userName: "Mimi",
