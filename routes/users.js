@@ -44,6 +44,7 @@ router.patch(
     },
   ]),
   async (req, res, next) => {
+    console.log("req.file >>>>>>>>>>>>>", req.files);
     try {
       const { id } = req.params;
       const {
@@ -64,11 +65,17 @@ router.patch(
         whishlist,
         balance,
       } = req.body;
+      console.log("image +++++", image);
+      console.log("coverImage +++++", coverImage);
+
       let newImage;
+      let newCoverImage;
       if (req.file) {
         newImage = req.file.path;
+        newCoverImage = req.file.path;
       } else {
         newImage = image;
+        newCoverImage = coverImage;
       }
 
       const editUser = await userModel.findByIdAndUpdate(
