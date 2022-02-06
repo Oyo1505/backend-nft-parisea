@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const postModel = require("../models/Post.model");
 const userModel = require("../models/user");
-const commentModel = require("../models/Comment.model")
+const commentModel = require("../models/Comment.model");
 const uploader = require("../config/cloudinary");
 const { Types } = require("mongoose");
 
@@ -46,37 +46,41 @@ router.get("/posts/:id", async (req, res) => {
 });
 
 // UPDATE - PATCH
-router.patch("/posts/:id", uploader.single("image"), async (req, res, next) => {
-  try {
-    const {
-      userId,
-      userName,
-      userPfp,
-      description,
-      postedTime,
-      existingImage,
-    } = req.body;
-    let newImage;
-    if (req.file) newImage = req.file.path;
-    else newImage = existingImage;
-
-    const updatedPost = await postModel.findByIdAndUpdate(
-      req.params.id,
-      {
-        // userId,
+router.patch(
+  "/posts/update/:id",
+  uploader.single("image"),
+  async (req, res, next) => {
+    try {
+      const {
+        userId,
         userName,
         userPfp,
         description,
         postedTime,
-        image: newImage,
-      },
-      { new: true }
-    );
-    res.status(200).json(updatedPost);
-  } catch (error) {
-    next(error);
+        existingImage,
+      } = req.body;
+      let newImage;
+      if (req.file) newImage = req.file.path;
+      else newImage = existingImage;
+
+      const updatedPost = await postModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          // userId,
+          userName,
+          userPfp,
+          description,
+          postedTime,
+          image: newImage,
+        },
+        { new: true }
+      );
+      res.status(200).json(updatedPost);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 // DELETE
 router.post("/posts/delete/:id", async (req, res) => {
@@ -109,10 +113,12 @@ router.patch("/posts/:id/comments", async (req, res, next) => {
       req.params.id,
       {
         $push: {
-          comments: {comment: req.body.comment,
-            userId: Types.ObjectId(req.body.userId)
+          comments: {
+            comment: req.body.comment,
+            userId: Types.ObjectId(req.body.userId),
+          },
         },
-      }},
+      },
       { new: true }
     );
     res.status(201).json(updqtedPost);

@@ -27,6 +27,7 @@
     "mongoose": "^6.2.0",
     "multer": "^1.4.4",
     "multer-storage-cloudinary": "^4.0.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "swr": "^1.2.1"
   }
 }
