@@ -34,14 +34,15 @@ router.post(
   }
 );
 
-// UPDATE - GET
-router.get("/posts/:id", async (req, res) => {
+// Detail - GET
+router.get("/posts/:id", async (req, res, next) => {
   console.log("req.params.id : >>>>>", req.params.id);
   try {
     const onePost = await postModel.findById(req.params.id).populate("userId");
     res.status(200).json(onePost);
   } catch (error) {
     console.error(error);
+    next(error);
   }
 });
 
