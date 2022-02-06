@@ -44,12 +44,13 @@ router.patch(
     },
   ]),
   async (req, res, next) => {
-    console.log("req.file >>>>>>>>>>>>>", req.files);
+    if (req.files) {
+      console.log("req.cover >>>>>>>>>>>>>", req.files.coverImage);
+    }
+
     try {
       const { id } = req.params;
       const {
-        image,
-        coverImage,
         name,
         userName,
         email,
