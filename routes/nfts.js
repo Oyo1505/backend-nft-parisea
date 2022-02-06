@@ -12,6 +12,15 @@ router.get("/nfts", async (req, res, next) => {
     next(e);
   }
 });
+//get a  NFTs to Marketplace
+router.get("/nfts/:limit", async (req, res, next) => {
+  try {
+    const nfts = await nftModel.find({ sold: false }).limit(req.params.limit);
+    res.status(200).json(nfts);
+  } catch (e) {
+    next(e);
+  }
+});
 //get a random NFT
 router.get("/random-nft", async (req, res, next) => {
   try {
@@ -27,7 +36,6 @@ router.get("/random-nft", async (req, res, next) => {
 });
 //return list of NFTs owned and created from the user
 router.get("/list-nfts/:mode/:id", async (req, res, next) => {
-  console.log(req.params.mode, req.params.id);
   const { mode, id } = req.params;
   try {
     const nfts = await nftModel.find({ [mode]: id });
