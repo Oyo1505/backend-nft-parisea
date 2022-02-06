@@ -7,6 +7,18 @@ const postSchema = new Schema({
   image: { type: String, required: true },
   description: String,
   postedTime: { type: Date, default: Date.now() },
+  // likes: [{ type: Schema.Types.ObjectId, ref: "user" }],
+  comments: [
+    {
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+      },
+      comment: {
+        type: String,
+      },
+    },
+  ],
 });
 
 const postModel = model("post", postSchema);

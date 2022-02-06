@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "seed:nfts": "node ./bin/seeds/nft.seed.js",
     "dev": "nodemon ./bin/www",
+    "seed:nfts": "node ./bin/seeds/nft.seed.js",
     "seed:post": "node ./bin/seeds/post.js",
-    "seed:user": "node ./bin/seeds/user.js"
+    "seed:comment": "node ./bin/seeds/comment.js",
+    "seed:user": "node ./bin/seeds/user.js",
+    "seed:all": "node ./bin/seeds/nft.seed.js && node ./bin/seeds/post.js && node ./bin/seeds/comment.js && node ./bin/seeds/user.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -22,7 +24,7 @@
     "http-errors": "^1.6.3",
     "jsonwebtoken": "^8.5.1",
     "mongo": "^0.1.0",
-    "mongoose": "^6.1.10",
+    "mongoose": "^6.2.0",
     "multer": "^1.4.4",
     "multer-storage-cloudinary": "^4.0.0",
     "nodemon": "^2.0.15"
