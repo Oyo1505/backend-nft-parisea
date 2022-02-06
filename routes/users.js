@@ -26,7 +26,6 @@ router.get("/users/:id", async (req, res, next) => {
 router.get("/users/edit/:id", async (req, res, next) => {
   try {
     const singleUser = await userModel.findById(req.params.id);
-    console.log(singleUser);
     res.status(200).json(singleUser);
   } catch (e) {
     next(e);
@@ -47,14 +46,31 @@ router.patch(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-
-      const { image, coverImage, name, userName, email, bio } = req.body;
+      const {
+        image,
+        coverImage,
+        name,
+        userName,
+        email,
+        bio,
+        following,
+        follower,
+        twitter,
+        facebook,
+        instagram,
+        posts,
+        nfts_ids_created,
+        nfts_ids_owned,
+        whishlist,
+        balance,
+      } = req.body;
       let newImage;
       if (req.file) {
         newImage = req.file.path;
       } else {
         newImage = image;
       }
+
       const editUser = await userModel.findByIdAndUpdate(
         id,
         {
@@ -64,10 +80,20 @@ router.patch(
           userName,
           email,
           bio,
+          following,
+          follower,
+          twitter,
+          facebook,
+          instagram,
+          posts,
+          nfts_ids_created,
+          nfts_ids_owned,
+          whishlist,
+          balance,
         },
         { new: true }
       );
-      console.log("ko", editUser);
+      console.log("ko");
       res.status(200).json(editUser);
     } catch (e) {
       next(e);

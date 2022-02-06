@@ -4,11 +4,12 @@ const nftSchema = new Schema({
   title: String,
   description: String,
   image: { type: String, require: true },
-  seller: { type: Schema.Types.ObjectId, refs: "user" },
-  owner: { type: Schema.Types.ObjectId, refs: "user" },
+  seller: { type: Schema.Types.ObjectId, ref: "user" },
+  owner: { type: Schema.Types.ObjectId, ref: "user" },
   price: { type: Number, required: true },
-  creator: { type: Schema.Types.ObjectId, refs: "user" },
+  creator: { type: Schema.Types.ObjectId, ref: "user" },
   category: String,
+  sold: { type: Boolean, default: false },
 });
 
 const nftModel = model("nft", nftSchema);

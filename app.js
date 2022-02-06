@@ -6,8 +6,6 @@ var app = express();
 const cors = require("cors");
 app.use(express.json());
 
-
-
 const corsOptions = {
   origin: process.env.CLIENT_URL,
   /* credentials : Configures the Access-Control-Allow-Credentials CORS header. Set to true to pass the header, otherwise it is omitted  https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials */
