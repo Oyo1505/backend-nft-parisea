@@ -93,7 +93,7 @@ router.patch(
         },
         { new: true }
       );
-      console.log("ko");
+
       res.status(200).json(editUser);
     } catch (e) {
       next(e);
