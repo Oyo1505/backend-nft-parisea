@@ -44,7 +44,6 @@ router.patch(
     },
   ]),
   async (req, res, next) => {
-    console.log("req.file >>>>>>>>>>>>>", req.files);
     try {
       const { id } = req.params;
       const {
@@ -65,8 +64,6 @@ router.patch(
         whishlist,
         balance,
       } = req.body;
-      console.log("image +++++", image);
-      console.log("coverImage +++++", coverImage);
 
       let newImage;
       let newCoverImage;
@@ -107,6 +104,65 @@ router.patch(
     }
   }
 );
+
+router.get("/follower/:id/:currentUserId", async (req, res, next) => {
+  try {
+    const follower = await userModel.findOne({
+      _id: req.params.id,
+      follower: { $in: req.params.currentUserId },
+    });
+    res.status(200).json(follower ? true : false);
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.patch("/add-follow/:id/:currentUserId", async (req, res, next) => {
+  try {
+    const foundedFollower = await userModel.findOne({
+      _id: req.params.id,
+      follower: { $in: req.params.currentUserId },
+    });
+    if (foundedFollower) {
+      //UNFOLLOW
+      await userModel.findByIdAndUpdate(
+        req.params.currentUserId,
+        {
+          $pull: { following: req.params.id },
+        },
+        { new: true }
+      );
+
+      await userModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $pull: { follower: req.params.currentUserId },
+        },
+        { new: true }
+      );
+      res.status(201).json({ followedUser: false });
+    } else {
+      //FOLLOW
+      await userModel.findByIdAndUpdate(
+        req.params.currentUserId,
+        {
+          $push: { following: req.params.id },
+        },
+        { new: true }
+      );
+      await userModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $push: { follower: req.params.currentUserId },
+        },
+        { new: true }
+      );
+      res.status(201).json({ followedUser: true });
+    }
+  } catch (e) {
+    next(e);
+  }
+});
 
 // DELETE
 router.get("/users/:id", async (req, res) => {
