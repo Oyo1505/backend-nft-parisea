@@ -19,8 +19,7 @@ router.post(
   "/posts/create",
   uploader.single("image"),
   async (req, res, next) => {
-    console.log("hello");
-    console.log("req.body : >>>>>", req.body);
+    console.log("Post create req.body : >>>>>", req.body);
     const image =
       req.file?.path ||
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTsidAbaLbPxZTeyE2TKH5ozutkieNJvJSEQ&usqp=CAU";
@@ -35,7 +34,7 @@ router.post(
 
 // Detail - GET
 router.get("/posts/:id", async (req, res, next) => {
-  console.log("req.params.id : >>>>>", req.params.id);
+  console.log("Post detail req.params.id : >>>>>", req.params.id);
   try {
     const onePost = await postModel.findById(req.params.id).populate("userId");
     res.status(200).json(onePost);
@@ -85,7 +84,7 @@ router.patch(
 // DELETE
 router.post("/posts/delete/:id", async (req, res) => {
   try {
-    console.log("req.params.id : >>>>>", req.params.id);
+    console.log("Post delete req.params.id : >>>>>", req.params.id);
     const postToDelete = await postModel.findByIdAndDelete(req.params.id);
     res.status(200).json(postToDelete);
   } catch (error) {
@@ -105,29 +104,29 @@ router.post("/posts/delete/:id", async (req, res) => {
 //   }
 // });
 
-// CREATE&UPDATE - COMMENT
-router.post("/posts/:id/comments", async (req, res, next) => {
-  console.log("req.params.id : >>>>>", req.params.id);
-  console.log("req.body : >>>>>", req.body);
-  try {
-    const updatedPost = await postModel.findByIdAndUpdate(
-      req.params.id,
-      {
-        $push: {
-          comments: {
-            comment: req.body.comment,
-            userId: Types.ObjectId(req.body.userId),
-          },
-        },
-      },
-      { new: true }
-    );
-    res.status(201).json(updatedPost);
-  } catch (error) {
-    console.log("Wrong way", error);
-    next(error);
-  }
-});
+// // CREATE&UPDATE - COMMENT
+// router.post("/posts/:id/comments", async (req, res, next) => {
+//   console.log("req.params.id : >>>>>", req.params.id);
+//   console.log("req.body : >>>>>", req.body.id);
+//   try {
+//     const updatedPost = await postModel.findByIdAndUpdate(
+//       req.params.id,
+//       {
+//         $push: {
+//           comments: {
+//             comment: req.body.comment,
+//             userId: Types.ObjectId(req.body.userId),
+//           },
+//         },
+//       },
+//       { new: true }
+//     );
+//     res.status(201).json(updatedPost);
+//   } catch (error) {
+//     console.log("Wrong way", error);
+//     next(error);
+//   }
+// });
 
 // ⬇︎⬇︎⬇︎⬇︎⬇︎　LIKES ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
 
