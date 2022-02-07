@@ -106,6 +106,7 @@ router.patch(
 );
 
 router.get("/follower/:id/:currentUserId", async (req, res, next) => {
+  console.log("HERE ••••••", req.params);
   try {
     const follower = await userModel.findOne({
       _id: req.params.id,
