@@ -15,7 +15,7 @@ router.get("/nfts", async (req, res, next) => {
 //return Single nft
 router.get("/nfts/:id", async (req, res, next) => {
   try {
-    const nft = await nftModel.findById(req.params.id);
+    const nft = await nftModel.findById(req.params.id).populate("creator");
     res.status(200).json(nft);
   } catch (e) {
     next(e);

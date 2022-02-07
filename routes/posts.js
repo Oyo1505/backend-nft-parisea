@@ -106,8 +106,6 @@ router.get("/posts/comments/:id", async (req, res) => {
 
 // // CREATE&UPDATE - COMMENT
 router.patch("/posts/comments/:id", async (req, res, next) => {
-  console.log("req.params.id : >>>>>", req.params.id);
-  console.log("req.body : >>>>>", req.body);
   try {
     const updatedPost = await postModel.findByIdAndUpdate(
       req.params.id,
