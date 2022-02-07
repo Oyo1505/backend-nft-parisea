@@ -64,7 +64,7 @@ const userSchema = new Schema({
   whishlist: [
     {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: "nft",
     },
   ],
   bio: String,

@@ -53,30 +53,22 @@ router.patch(
         bio,
         image,
         coverImage,
-        following,
-        follower,
         twitter,
         facebook,
         instagram,
-        posts,
-        nfts_ids_created,
-        nfts_ids_owned,
-        whishlist,
-        balance,
       } = req.body;
-
+    
       let newImage;
       let newCoverImage;
-     
+      console.log(req.body )  
       if (req.files) {
         newImage = req.files.image[0].path;
         newCoverImage = req.files.coverImage[0].path;
       } else {
-       
         newImage = image;
         newCoverImage = coverImage;
       }
-      console.log(newImage,newCoverImage )
+      console.log(editUser)
       const editUser = await userModel.findByIdAndUpdate(
         id,
         {
@@ -86,16 +78,9 @@ router.patch(
           userName,
           email,
           bio,
-          following,
-          follower,
           twitter,
           facebook,
           instagram,
-          posts,
-          nfts_ids_created,
-          nfts_ids_owned,
-          whishlist,
-          balance,
         },
         { new: true }
       );
