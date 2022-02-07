@@ -134,14 +134,14 @@ router.patch("/add-follow/:id/:currentUserId", async (req, res, next) => {
         { new: true }
       );
 
-      await userModel.findByIdAndUpdate(
+      const user = await userModel.findByIdAndUpdate(
         req.params.id,
         {
           $pull: { follower: req.params.currentUserId },
         },
         { new: true }
       );
-      res.status(201).json({ followedUser: false });
+      res.status(201).json({ followedUser: false, user });
     } else {
       //FOLLOW
       await userModel.findByIdAndUpdate(
@@ -151,14 +151,14 @@ router.patch("/add-follow/:id/:currentUserId", async (req, res, next) => {
         },
         { new: true }
       );
-      await userModel.findByIdAndUpdate(
+      const user = await userModel.findByIdAndUpdate(
         req.params.id,
         {
           $push: { follower: req.params.currentUserId },
         },
         { new: true }
       );
-      res.status(201).json({ followedUser: true });
+      res.status(201).json({ followedUser: true, user });
     }
   } catch (e) {
     next(e);
