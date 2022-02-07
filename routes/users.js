@@ -25,7 +25,9 @@ router.get("/users/:id", async (req, res, next) => {
 
 router.get("/users/edit/:id", async (req, res, next) => {
   try {
-    const singleUser = await userModel.findById(req.params.id);
+    const singleUser = await userModel
+      .findById(req.params.id)
+      .populate(["follower", "following"]);
     res.status(200).json(singleUser);
   } catch (e) {
     next(e);
@@ -136,14 +138,14 @@ router.patch("/add-follow/:id/:currentUserId", async (req, res, next) => {
         { new: true }
       );
 
-      await userModel.findByIdAndUpdate(
+      const user = await userModel.findByIdAndUpdate(
         req.params.id,
         {
           $pull: { follower: req.params.currentUserId },
         },
         { new: true }
       );
-      res.status(201).json({ followedUser: false });
+      res.status(201).json({ followedUser: false, user });
     } else {
       //FOLLOW
       await userModel.findByIdAndUpdate(
@@ -153,14 +155,14 @@ router.patch("/add-follow/:id/:currentUserId", async (req, res, next) => {
         },
         { new: true }
       );
-      await userModel.findByIdAndUpdate(
+      const user = await userModel.findByIdAndUpdate(
         req.params.id,
         {
           $push: { follower: req.params.currentUserId },
         },
         { new: true }
       );
-      res.status(201).json({ followedUser: true });
+      res.status(201).json({ followedUser: true, user });
     }
   } catch (e) {
     next(e);
