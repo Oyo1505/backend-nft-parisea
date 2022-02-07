@@ -44,11 +44,6 @@ router.patch(
     },
   ]),
   async (req, res, next) => {
-    if (req.files) {
-      console.log("req.cover >>>>>>>>>>>>>", req.files.coverImage);
-      console.log("req.cover >>>>>>>>>>>>>", req.files.image);
-    }
-
     try {
       const { id } = req.params;
       const {
@@ -56,6 +51,8 @@ router.patch(
         userName,
         email,
         bio,
+        image,
+        coverImage,
         following,
         follower,
         twitter,
@@ -67,24 +64,24 @@ router.patch(
         whishlist,
         balance,
       } = req.body;
-      console.log("image +++++", image);
-      console.log("coverImage +++++", coverImage);
 
       let newImage;
       let newCoverImage;
-      if (req.file) {
-        newImage = req.file.path;
-        newCoverImage = req.file.path;
+     
+      if (req.files) {
+        newImage = req.files.image[0].path;
+        newCoverImage = req.files.coverImage[0].path;
       } else {
+       
         newImage = image;
         newCoverImage = coverImage;
       }
-
+      console.log(newImage,newCoverImage )
       const editUser = await userModel.findByIdAndUpdate(
         id,
         {
-          image,
-          coverImage,
+          image : newImage,
+          coverImage : newCoverImage,
           name,
           userName,
           email,
@@ -102,13 +99,73 @@ router.patch(
         },
         { new: true }
       );
-
+        console.log(editUser)
       res.status(200).json(editUser);
     } catch (e) {
       next(e);
     }
   }
 );
+
+router.get("/follower/:id/:currentUserId", async (req, res, next) => {
+  console.log("HERE ••••••", req.params);
+  try {
+    const follower = await userModel.findOne({
+      _id: req.params.id,
+      follower: { $in: req.params.currentUserId },
+    });
+    res.status(200).json(follower ? true : false);
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.patch("/add-follow/:id/:currentUserId", async (req, res, next) => {
+  try {
+    const foundedFollower = await userModel.findOne({
+      _id: req.params.id,
+      follower: { $in: req.params.currentUserId },
+    });
+    if (foundedFollower) {
+      //UNFOLLOW
+      await userModel.findByIdAndUpdate(
+        req.params.currentUserId,
+        {
+          $pull: { following: req.params.id },
+        },
+        { new: true }
+      );
+
+      await userModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $pull: { follower: req.params.currentUserId },
+        },
+        { new: true }
+      );
+      res.status(201).json({ followedUser: false });
+    } else {
+      //FOLLOW
+      await userModel.findByIdAndUpdate(
+        req.params.currentUserId,
+        {
+          $push: { following: req.params.id },
+        },
+        { new: true }
+      );
+      await userModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $push: { follower: req.params.currentUserId },
+        },
+        { new: true }
+      );
+      res.status(201).json({ followedUser: true });
+    }
+  } catch (e) {
+    next(e);
+  }
+});
 
 // DELETE
 router.get("/users/:id", async (req, res) => {
