@@ -95,38 +95,38 @@ router.post("/posts/delete/:id", async (req, res) => {
 // ⬇︎⬇︎⬇︎⬇︎⬇︎　COMMENT ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
 
 // GET - COMMENT
-// router.get("/posts/:id/comments", async (req, res) => {
-//   try {
-//     const comments = await postModel.find().populate("userId");
-//     res.status(200).json(comments);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
+router.get("/posts/comments/:id", async (req, res) => {
+  try {
+    const comments = await postModel.find().populate("userId");
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 // // CREATE&UPDATE - COMMENT
-// router.post("/posts/:id/comments", async (req, res, next) => {
-//   console.log("req.params.id : >>>>>", req.params.id);
-//   console.log("req.body : >>>>>", req.body.id);
-//   try {
-//     const updatedPost = await postModel.findByIdAndUpdate(
-//       req.params.id,
-//       {
-//         $push: {
-//           comments: {
-//             comment: req.body.comment,
-//             userId: Types.ObjectId(req.body.userId),
-//           },
-//         },
-//       },
-//       { new: true }
-//     );
-//     res.status(201).json(updatedPost);
-//   } catch (error) {
-//     console.log("Wrong way", error);
-//     next(error);
-//   }
-// });
+router.patch("/posts/comments/:id", async (req, res, next) => {
+  console.log("req.params.id : >>>>>", req.params.id);
+  console.log("req.body : >>>>>", req.body);
+  try {
+    const updatedPost = await postModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: {
+          comments: {
+            comment: req.body.comment,
+            userId: Types.ObjectId(req.body.userId),
+          },
+        },
+      },
+      { new: true }
+    );
+    res.status(201).json(updatedPost);
+  } catch (error) {
+    console.log("Wrong way", error);
+    next(error);
+  }
+});
 
 // ⬇︎⬇︎⬇︎⬇︎⬇︎　LIKES ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
 

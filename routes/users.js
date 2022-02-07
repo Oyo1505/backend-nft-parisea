@@ -46,6 +46,7 @@ router.patch(
   async (req, res, next) => {
     if (req.files) {
       console.log("req.cover >>>>>>>>>>>>>", req.files.coverImage);
+      console.log("req.cover >>>>>>>>>>>>>", req.files.image);
     }
 
     try {
