@@ -52,28 +52,35 @@ router.patch(
     try {
       const {
         userId,
-        userName,
-        userPfp,
+        title,
+        existingImage,
         description,
         postedTime,
-        existingImage,
+        comments,
       } = req.body;
       let newImage;
       if (req.file) newImage = req.file.path;
       else newImage = existingImage;
 
-      const updatedPost = await postModel.findByIdAndUpdate(
-        req.params.id,
-        {
-          // userId,
-          userName,
-          userPfp,
-          description,
-          postedTime,
-          image: newImage,
-        },
-        { new: true }
-      );
+      const updatedPost = await postModel
+        .findByIdAndUpdate(
+          req.params.id,
+          {
+            userId,
+            title,
+            image: newImage,
+            description,
+            postedTime,
+            comments,
+          },
+          { new: true }
+        )
+        .populate({
+          path: "comments",
+          populate: {
+            path: "userId",
+          },
+        });
       res.status(200).json(updatedPost);
     } catch (error) {
       next(error);
