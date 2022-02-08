@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const postModel = require("../models/Post.model");
-const userModel = require("../models/user");
 const uploader = require("../config/cloudinary");
 const { Types } = require("mongoose");
 
@@ -119,7 +118,7 @@ router.get("/posts/comments/:id", async (req, res) => {
   }
 });
 
-// CREATE&UPDATE - COMMENT
+// CREATE(UPDATE) - COMMENT
 router.patch("/posts/comments/:id", async (req, res, next) => {
   console.log("Comment : req.body >>>>>", req.body);
   try {
@@ -163,6 +162,21 @@ router.patch("/posts/comments/delete/:id", async (req, res) => {
       { new: true }
     );
     res.status(200).json(commentToDelete);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// ⬇︎⬇︎⬇︎⬇︎⬇︎　USER PAGE - MY POST ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
+
+// DISPLAY ONLY MY POSTS
+router.get("/posts/mypost/:id", async (req, res) => {
+  try {
+    console.log(req.params.id);
+    const posts = await postModel.find({
+      userId: req.params.id,
+    });
+    res.status(200).json(posts);
   } catch (error) {
     console.error(error);
   }
