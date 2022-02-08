@@ -33,7 +33,9 @@ router.get("/users/:id", async (req, res, next) => {
 
 router.get("/users/edit/:id", async (req, res, next) => {
   try {
-    const singleUser = await userModel.findById(req.params.id);
+    const singleUser = await userModel
+      .findById(req.params.id)
+      .populate(["follower", "following"]);
     res.status(200).json(singleUser);
   } catch (e) {
     next(e);
