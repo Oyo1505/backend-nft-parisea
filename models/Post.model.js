@@ -2,12 +2,10 @@ const { model, Schema } = require("mongoose");
 
 const postSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "user" },
-  userName: String,
-  userPfp: String,
+  title: {type:String, required: true},
   image: { type: String, required: true },
   description: String,
   postedTime: { type: Date, default: Date.now() },
-  // likes: [{ type: Schema.Types.ObjectId, ref: "user" }],
   comments: [
     {
       userId: {
@@ -17,6 +15,7 @@ const postSchema = new Schema({
       comment: {
         type: String,
       },
+      commentedTime: { type: Date, default: Date.now() },
     },
   ],
 });

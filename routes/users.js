@@ -3,6 +3,14 @@ const router = express.Router();
 const userModel = require("../models/user");
 const uploader = require("../config/cloudinary");
 
+function imageEditForm(file, type, image) {
+  if (file[type] !== undefined) {
+    return file[type][0].path;
+  } else {
+    return image;
+  }
+}
+
 // DISPLAY USERS
 router.get("/users", async (req, res, next) => {
   try {
@@ -49,53 +57,32 @@ router.patch(
     try {
       const { id } = req.params;
       const {
-        image,
-        coverImage,
         name,
         userName,
         email,
         bio,
-        following,
-        follower,
+        image,
+        coverImage,
         twitter,
         facebook,
         instagram,
-        posts,
-        nfts_ids_created,
-        nfts_ids_owned,
-        whishlist,
-        balance,
       } = req.body;
 
-      let newImage;
-      let newCoverImage;
-      if (req.file) {
-        newImage = req.file.path;
-        newCoverImage = req.file.path;
-      } else {
-        newImage = image;
-        newCoverImage = coverImage;
-      }
+      let newImage = imageEditForm(req.files, "image", image);
+      let newCoverImage = imageEditForm(req.files, "coverImage", coverImage);
 
       const editUser = await userModel.findByIdAndUpdate(
         id,
         {
-          image,
-          coverImage,
+          image: newImage,
+          coverImage: newCoverImage,
           name,
           userName,
           email,
           bio,
-          following,
-          follower,
           twitter,
           facebook,
           instagram,
-          posts,
-          nfts_ids_created,
-          nfts_ids_owned,
-          whishlist,
-          balance,
         },
         { new: true }
       );
@@ -108,7 +95,6 @@ router.patch(
 );
 
 router.get("/follower/:id/:currentUserId", async (req, res, next) => {
-  console.log("HERE ••••••", req.params);
   try {
     const follower = await userModel.findOne({
       _id: req.params.id,

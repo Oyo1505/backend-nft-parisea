@@ -12,8 +12,17 @@ router.get("/nfts", async (req, res, next) => {
     next(e);
   }
 });
+//return Single nft
+router.get("/nfts/:id", async (req, res, next) => {
+  try {
+    const nft = await nftModel.findById(req.params.id).populate("creator");
+    res.status(200).json(nft);
+  } catch (e) {
+    next(e);
+  }
+});
 //get a  NFTs to Marketplace
-router.get("/nfts/:limit", async (req, res, next) => {
+router.get("/nfts/market/:limit", async (req, res, next) => {
   try {
     const nfts = await nftModel.find({ sold: false }).limit(req.params.limit);
     res.status(200).json(nfts);
@@ -21,6 +30,7 @@ router.get("/nfts/:limit", async (req, res, next) => {
     next(e);
   }
 });
+
 //get a random NFT
 router.get("/random-nft", async (req, res, next) => {
   try {
@@ -111,15 +121,6 @@ router.post(
   }
 );
 
-//return Single nft
-router.get("/nfts/:id", async (req, res, next) => {
-  try {
-    const nft = await nftModel.findById(req.params.id);
-    res.status(200).json(nft);
-  } catch (e) {
-    next(e);
-  }
-});
 //return NFTs created, owened,  by the current user
 router.get("/nfts/:spec/:id", async (req, res, next) => {
   const spec = req.params.spec;
