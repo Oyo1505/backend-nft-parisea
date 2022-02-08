@@ -3,8 +3,12 @@ const router = express.Router();
 const userModel = require("../models/user");
 const uploader = require("../config/cloudinary");
 
-function imageEditForm(file) {
-  //if(file)
+function imageEditForm(file, type, image) {
+  if (file[type] !== undefined) {
+    return file[type][0].path;
+  } else {
+    return image;
+  }
 }
 
 // DISPLAY USERS
@@ -62,21 +66,8 @@ router.patch(
         instagram,
       } = req.body;
 
-      let newImage;
-      let newCoverImage;
-
-      // if (req.files && req.files.image > 0) {
-      //   newImage = req.files.image[0].path;
-      // } else {
-      //   newImage = image;
-      //   console.log(newImage, "esle");
-      // }
-      // if (req.files && req.files.coverImage.length > 0) {
-      //   newCoverImage = req.files.coverImage[0].path;
-      // } else {
-      //   newCoverImage = coverImage;
-      //   console.log(newImage, "esqdqssle");
-      // }
+      let newImage = imageEditForm(req.files, "image", image);
+      let newCoverImage = imageEditForm(req.files, "coverImage", coverImage);
 
       const editUser = await userModel.findByIdAndUpdate(
         id,
