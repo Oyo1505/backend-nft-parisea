@@ -2,8 +2,7 @@ const { model, Schema } = require("mongoose");
 
 const postSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "user" },
-  title: {type:String},
-  image: { type: String, default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTsidAbaLbPxZTeyE2TKH5ozutkieNJvJSEQ&usqp=CAU" },
+  image: { type: String, required: true },
   description: String,
   postedTime: { type: Date, default: Date.now() },
   comments: [
@@ -16,6 +15,12 @@ const postSchema = new Schema({
         type: String,
       },
       commentedTime: { type: Date, default: Date.now() },
+    },
+  ],
+  likes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
   ],
 });

@@ -1,8 +1,26 @@
 const router = require("express").Router();
 const postModel = require("../models/Post.model");
-const userModel = require("../models/user");
 const uploader = require("../config/cloudinary");
 const { Types } = require("mongoose");
+
+// ⬇︎⬇︎⬇︎⬇︎⬇︎　USER PAGE - MY POST ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
+
+// DISPLAY ONLY MY POSTS
+router.get("/posts/mypost/:id", async (req, res) => {
+  try {
+    console.log(req.params.id);
+    const posts = await postModel
+      .find({
+        userId: req.params.id,
+      })
+      .populate("userId");
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// ⬇︎⬇︎⬇︎⬇︎⬇︎　POSTS CRUD ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
 
 // DISPLAY ALL POSTS
 router.get("/posts", async (req, res) => {
@@ -125,7 +143,7 @@ router.get("/posts/comments/:id", async (req, res) => {
   }
 });
 
-// CREATE&UPDATE - COMMENT
+// CREATE(UPDATE) - COMMENT
 router.patch("/posts/comments/:id", async (req, res, next) => {
   try {
     const updatedPost = await postModel
@@ -168,6 +186,69 @@ router.patch("/posts/comments/delete/:id", async (req, res) => {
     res.status(200).json(commentToDelete);
   } catch (error) {
     console.error(error);
+  }
+});
+
+// ⬇︎⬇︎⬇︎⬇︎⬇︎　LIKES ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
+
+// GET - LIKE
+router.get("/posts/likes/:id/:userId", async (req, res) => {
+  try {
+    const addedLike = await postModel.findOne({
+      _id: req.params.id,
+      likes: { $in: req.params.userId },
+    });
+
+    if (!addedLike) {
+      res.status(201).json({ likeAdded: false });
+    } else {
+      res.status(201).json({ likeAdded: true });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// ADD (PATCH) - LIKE
+router.patch("/posts/likes/:id", async (req, res, next) => {
+  console.log("Like : post id >>>>>", req.params.id);
+  console.log("Like : user id >>>>>", req.body.userId);
+
+  try {
+    const addedLike = await postModel.findOne({
+      _id: req.params.id,
+      likes: { $in: req.body.userId },
+    });
+    console.log(addedLike);
+
+    if (!addedLike) {
+      const post = await postModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $push: {
+            likes: req.body.userId,
+          },
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(201).json({ likeAdded: true, post });
+    } else {
+      const post = await postModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $pull: {
+            likes: req.body.userId,
+          },
+        },
+        { new: true }
+      );
+      res.status(201).json({ likeAdded: false, post });
+    }
+  } catch (error) {
+    console.log("Wrong way", error);
+    next(error);
   }
 });
 
