@@ -1,8 +1,26 @@
 const router = require("express").Router();
 const postModel = require("../models/Post.model");
-const userModel = require("../models/user");
 const uploader = require("../config/cloudinary");
 const { Types } = require("mongoose");
+
+// ⬇︎⬇︎⬇︎⬇︎⬇︎　USER PAGE - MY POST ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
+
+// DISPLAY ONLY MY POSTS
+router.get("/posts/mypost/:id", async (req, res) => {
+  try {
+    console.log(req.params.id);
+    const posts = await postModel
+      .find({
+        userId: req.params.id,
+      })
+      .populate("userId");
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// ⬇︎⬇︎⬇︎⬇︎⬇︎　POSTS CRUD ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
 
 // DISPLAY ALL POSTS
 router.get("/posts", async (req, res) => {
@@ -113,7 +131,6 @@ router.get("/posts/comments/:id", async (req, res) => {
       },
     });
     // const sss = comments.comments.populate("userId");
-    // console.log(sss);
     console.log("Comment : get >>>>>", comments);
     res.status(200).json(comments);
   } catch (error) {
@@ -121,7 +138,7 @@ router.get("/posts/comments/:id", async (req, res) => {
   }
 });
 
-// CREATE&UPDATE - COMMENT
+// CREATE(UPDATE) - COMMENT
 router.patch("/posts/comments/:id", async (req, res, next) => {
   try {
     const updatedPost = await postModel
@@ -166,6 +183,56 @@ router.patch("/posts/comments/delete/:id", async (req, res) => {
     res.status(200).json(commentToDelete);
   } catch (error) {
     console.error(error);
+  }
+});
+
+// ⬇︎⬇︎⬇︎⬇︎⬇︎　LIKES ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
+
+// GET - LIKE
+router.get("/posts/likes/:id", async (req, res) => {
+  try {
+    const likes = await postModel.findById(req.params.id);
+    console.log("LIKE : get >>>>>", likes);
+    res.status(200).json(likes.likes);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// ADD - LIKE
+router.patch("/posts/likes/addlike/:id", async (req, res, next) => {
+  try {
+    const foundLike = await postModel.findOne({
+      _id: req.body.postId,
+      likes: { $in: req.body.currentUserId },
+    });
+    if (foundLike) {
+      // UNLIKE
+      await postModel.findByIdAndUpdate(
+        req.body.postId,
+        {
+          $pull: { likes: req.body.currentUserId },
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(201).json({ likeAdded: false });
+    } else {
+      // LIKE
+      await postModel.findByIdAndUpdate(
+        req.body.postId,
+        {
+          $push: { likes: req.body.currentUserId },
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(201).json({ likeAdded: true });
+    }
+  } catch (e) {
+    next(e);
   }
 });
 
