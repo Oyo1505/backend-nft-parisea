@@ -3,6 +3,14 @@ const router = express.Router();
 const userModel = require("../models/user");
 const uploader = require("../config/cloudinary");
 
+function imageEditForm(file, type, image) {
+  if (file[type] !== undefined) {
+    return file[type][0].path;
+  } else {
+    return image;
+  }
+}
+
 // DISPLAY USERS
 router.get("/users", async (req, res, next) => {
   try {
@@ -55,53 +63,32 @@ router.patch(
         bio,
         image,
         coverImage,
-        following,
-        follower,
         twitter,
         facebook,
         instagram,
-        posts,
-        nfts_ids_created,
-        nfts_ids_owned,
-        whishlist,
-        balance,
       } = req.body;
 
-      let newImage;
-      let newCoverImage;
-     
-      if (req.files) {
-        newImage = req.files.image[0].path;
-        newCoverImage = req.files.coverImage[0].path;
-      } else {
-       
-        newImage = image;
-        newCoverImage = coverImage;
-      }
-      console.log(newImage,newCoverImage )
+      let newImage = imageEditForm(req.files, "image", image);
+      let newCoverImage = imageEditForm(req.files, "coverImage", coverImage);
+      console.log("here", req.params);
+
       const editUser = await userModel.findByIdAndUpdate(
         id,
         {
-          image : newImage,
-          coverImage : newCoverImage,
+          image: newImage,
+          coverImage: newCoverImage,
           name,
           userName,
           email,
           bio,
-          following,
-          follower,
           twitter,
           facebook,
           instagram,
-          posts,
-          nfts_ids_created,
-          nfts_ids_owned,
-          whishlist,
-          balance,
         },
         { new: true }
       );
-        console.log(editUser)
+
+      console.log("EDIT >>>>>>>>>>>>>>>", editUser);
       res.status(200).json(editUser);
     } catch (e) {
       next(e);
@@ -110,7 +97,6 @@ router.patch(
 );
 
 router.get("/follower/:id/:currentUserId", async (req, res, next) => {
-  console.log("HERE ••••••", req.params);
   try {
     const follower = await userModel.findOne({
       _id: req.params.id,

@@ -110,8 +110,10 @@ router.patch(
 router.post("/posts/delete/:id", async (req, res) => {
   try {
     console.log("Post delete req.params.id : >>>>>", req.params.id);
-    const postToDelete = await postModel.findByIdAndDelete(req.params.id);
-    res.status(200).json(postToDelete);
+    const postToDelete = await postModel.findByIdAndRemove(req.params.id);
+    const posts = await postModel.find()
+    console.log(posts)
+    res.status(200).json(posts);
   } catch (error) {
     console.error(error);
   }
@@ -138,7 +140,6 @@ router.get("/posts/comments/:id", async (req, res) => {
 
 // CREATE(UPDATE) - COMMENT
 router.patch("/posts/comments/:id", async (req, res, next) => {
-  console.log("Comment : req.body >>>>>", req.body);
   try {
     const updatedPost = await postModel
       .findByIdAndUpdate(

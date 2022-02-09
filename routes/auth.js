@@ -13,17 +13,20 @@ router.get("/connect-wallet/:id", async (req, res, next) => {
 
 router.post("/connect-wallet/:id", async (req, res, next) => {
   try {
+    
     const newUser = {};
     const foundUser = await userModel.findOne({
       id_metamask: req.params.id,
     });
-
+    
     if (foundUser) {
       res.status(200).json(foundUser);
     } else {
       newUser.id_metamask = req.params.id;
       newUser.balance = 100;
+      console.log(newUser)
       const user = await userModel.create(newUser);
+      console.log(user)
       res.status(200).json(user);
     }
   } catch (e) {
