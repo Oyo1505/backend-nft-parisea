@@ -111,8 +111,8 @@ router.post("/posts/delete/:id", async (req, res) => {
   try {
     console.log("Post delete req.params.id : >>>>>", req.params.id);
     const postToDelete = await postModel.findByIdAndRemove(req.params.id);
-    const posts = await postModel.find()
-    console.log(posts)
+    const posts = await postModel.find();
+    console.log(posts);
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
@@ -189,16 +189,18 @@ router.patch("/posts/comments/delete/:id", async (req, res) => {
 // ⬇︎⬇︎⬇︎⬇︎⬇︎　LIKES ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
 
 // GET - LIKE
-router.get("/posts/likes/:id", async (req, res) => {
+router.get("/posts/likes/:id/:userId", async (req, res) => {
   try {
-    const likes = await postModel.findById(req.params.id).populate({
-      path: "likes",
-      populate: {
-        path: "userId",
-      },
+    const addedLike = await postModel.findOne({
+      _id: req.params.id,
+      likes: { $in: req.params.userId },
     });
-    console.log("LIKE : get >>>>>", req.body);
-    res.status(200).json(likes);
+
+    if (!addedLike) {
+      res.status(201).json({ likeAdded: false });
+    } else {
+      res.status(201).json({ likeAdded: true });
+    }
   } catch (error) {
     console.error(error);
   }
@@ -212,37 +214,34 @@ router.patch("/posts/likes/:id", async (req, res, next) => {
   try {
     const addedLike = await postModel.findOne({
       _id: req.params.id,
+      likes: { $in: req.body.userId },
     });
+    console.log(addedLike);
 
-    if (addedLike) {
-      await postModel.findByIdAndUpdate(
-        req.params.id,
-        {
-          $pull: {
-            likes: {
-              userId: Types.ObjectId(req.body.userId),
-            },
-          },
-        },
-
-        { new: true }
-      );
-      res.status(201).json({ likeAdded: true });
-    } else {
-      await postModel.findByIdAndUpdate(
+    if (!addedLike) {
+      const post = await postModel.findByIdAndUpdate(
         req.params.id,
         {
           $push: {
-            likes: {
-              userId: Types.ObjectId(req.body.userId),
-            },
+            likes: req.body.userId,
           },
         },
         {
           new: true,
         }
       );
-      res.status(201).json({ likeAdded: false });
+      res.status(201).json({ likeAdded: true, post });
+    } else {
+      const post = await postModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $pull: {
+            likes: req.body.userId,
+          },
+        },
+        { new: true }
+      );
+      res.status(201).json({ likeAdded: false, post });
     }
   } catch (error) {
     console.log("Wrong way", error);
