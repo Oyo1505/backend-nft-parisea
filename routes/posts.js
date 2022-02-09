@@ -19,12 +19,14 @@ router.post(
   "/posts/create",
   uploader.single("image"),
   async (req, res, next) => {
-    console.log("Post create req.body : >>>>>", req.body);
+   
     const image =
       req.file?.path ||
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTsidAbaLbPxZTeyE2TKH5ozutkieNJvJSEQ&usqp=CAU";
-    try {
+     
+      try {
       const createdPost = await postModel.create({ ...req.body, image });
+      
       res.status(201).json(createdPost);
     } catch (error) {
       next(error);
@@ -34,7 +36,6 @@ router.post(
 
 // Detail - GET
 router.get("/posts/:id", async (req, res, next) => {
-  console.log("Post detail req.params.id : >>>>>", req.params.id);
   try {
     const onePost = await postModel.findById(req.params.id).populate("userId");
     res.status(200).json(onePost);
@@ -87,14 +88,20 @@ router.patch(
     }
   }
 );
-
+router.get("/posts/market/:limit", async (req, res, next) => {
+ 
+  try {
+    const posts = await postModel.find().limit(req.params.limit).populate("userId");
+    res.status(200).json(posts);
+  } catch (e) {
+    next(e);
+  }
+});
 // DELETE
 router.post("/posts/delete/:id", async (req, res) => {
   try {
-    console.log("Post delete req.params.id : >>>>>", req.params.id);
-    const postToDelete = await postModel.findByIdAndRemove(req.params.id);
+    await postModel.findByIdAndRemove(req.params.id);
     const posts = await postModel.find()
-    console.log(posts)
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
@@ -112,9 +119,6 @@ router.get("/posts/comments/:id", async (req, res) => {
         path: "userId",
       },
     });
-    // const sss = comments.comments.populate("userId");
-    // console.log(sss);
-    console.log("Comment : get >>>>>", comments);
     res.status(200).json(comments);
   } catch (error) {
     console.error(error);
@@ -145,14 +149,12 @@ router.patch("/posts/comments/:id", async (req, res, next) => {
       });
     res.status(201).json(updatedPost);
   } catch (error) {
-    console.log("Wrong way", error);
     next(error);
   }
 });
 
 // DELETE(UPDATE) - COMMENT
 router.patch("/posts/comments/delete/:id", async (req, res) => {
-  console.log("Comment delete req.params.id >>>>>", req.params.id); //should be post id
   try {
     const commentToDelete = await postModel.findByIdAndUpdate(
       req.params.id,
