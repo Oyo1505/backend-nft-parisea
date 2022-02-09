@@ -190,48 +190,62 @@ router.patch("/posts/comments/delete/:id", async (req, res) => {
 // GET - LIKE
 router.get("/posts/likes/:id", async (req, res) => {
   try {
-    const likes = await postModel.findById(req.params.id);
-    console.log("LIKE : get >>>>>", likes);
-    res.status(200).json(likes.likes);
+    const likes = await postModel.findById(req.params.id).populate({
+      path: "likes",
+      populate: {
+        path: "userId",
+      },
+    });
+    console.log("LIKE : get >>>>>", req.body);
+    res.status(200).json(likes);
   } catch (error) {
     console.error(error);
   }
 });
 
-// ADD - LIKE
-router.patch("/posts/likes/addlike/:id", async (req, res, next) => {
+// ADD (PATCH) - LIKE
+router.patch("/posts/likes/:id", async (req, res, next) => {
+  console.log("Like : post id >>>>>", req.params.id);
+  console.log("Like : user id >>>>>", req.body.userId);
+
   try {
-    const foundLike = await postModel.findOne({
-      _id: req.body.postId,
-      likes: { $in: req.body.currentUserId },
+    const addedLike = await postModel.findOne({
+      _id: req.params.id,
     });
-    if (foundLike) {
-      // UNLIKE
+
+    if (addedLike) {
       await postModel.findByIdAndUpdate(
-        req.body.postId,
+        req.params.id,
         {
-          $pull: { likes: req.body.currentUserId },
+          $pull: {
+            likes: {
+              userId: Types.ObjectId(req.body.userId),
+            },
+          },
+        },
+
+        { new: true }
+      );
+      res.status(201).json({ likeAdded: true });
+    } else {
+      await postModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $push: {
+            likes: {
+              userId: Types.ObjectId(req.body.userId),
+            },
+          },
         },
         {
           new: true,
         }
       );
       res.status(201).json({ likeAdded: false });
-    } else {
-      // LIKE
-      await postModel.findByIdAndUpdate(
-        req.body.postId,
-        {
-          $push: { likes: req.body.currentUserId },
-        },
-        {
-          new: true,
-        }
-      );
-      res.status(201).json({ likeAdded: true });
     }
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    console.log("Wrong way", error);
+    next(error);
   }
 });
 

@@ -17,6 +17,14 @@ const postSchema = new Schema({
       commentedTime: { type: Date, default: Date.now() },
     },
   ],
+  likes: [
+    {
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+      },
+    },
+  ],
 });
 
 const postModel = model("post", postSchema);
