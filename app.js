@@ -7,6 +7,8 @@ const cors = require("cors");
 app.use(express.json());
 const path = require("path");
 
+app.use(express.static(path.join(__dirname, "public")));
+
 const corsOptions = {
   origin: process.env.CLIENT_URL,
   /* credentials : Configures the Access-Control-Allow-Credentials CORS header. Set to true to pass the header, otherwise it is omitted  https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials */
@@ -42,6 +44,7 @@ app.use("/api/*", (req, res, next) => {
   error.status = 404;
   next(error);
 });
+
 if (process.env.NODE_ENV === "production") {
   app.use("*", (req, res, next) => {
     // If no routes match, send them the React HTML.
