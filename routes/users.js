@@ -71,6 +71,7 @@ router.patch(
 
       let newImage = imageEditForm(req.files, "image", image);
       let newCoverImage = imageEditForm(req.files, "coverImage", coverImage);
+      console.log("here", req.params);
 
       const editUser = await userModel.findByIdAndUpdate(
         id,
@@ -88,6 +89,7 @@ router.patch(
         { new: true }
       );
 
+      console.log("EDIT >>>>>>>>>>>>>>>", editUser);
       res.status(200).json(editUser);
     } catch (e) {
       next(e);
@@ -163,5 +165,7 @@ router.get("/users/:id", async (req, res) => {
     next(e);
   }
 });
+
+
 
 module.exports = router;

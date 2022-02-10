@@ -10,6 +10,7 @@ const nftSchema = new Schema({
   creator: { type: Schema.Types.ObjectId, ref: "user" },
   category: String,
   sold: { type: Boolean, default: false },
+  wishlists: [{ type: Schema.Types.ObjectId, ref: "user" }],
 });
 
 const nftModel = model("nft", nftSchema);
