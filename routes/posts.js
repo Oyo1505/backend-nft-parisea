@@ -14,6 +14,7 @@ router.get("/posts/mypost/:id", async (req, res) => {
         userId: req.params.id,
       })
       .populate("userId");
+    console.log(posts);
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
@@ -37,12 +38,13 @@ router.post(
   "/posts/create",
   uploader.single("image"),
   async (req, res, next) => {
-    console.log("Post create req.body : >>>>>", req.body);
     const image =
       req.file?.path ||
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTsidAbaLbPxZTeyE2TKH5ozutkieNJvJSEQ&usqp=CAU";
+
     try {
       const createdPost = await postModel.create({ ...req.body, image });
+
       res.status(201).json(createdPost);
     } catch (error) {
       next(error);
@@ -52,7 +54,6 @@ router.post(
 
 // Detail - GET
 router.get("/posts/:id", async (req, res, next) => {
-  console.log("Post detail req.params.id : >>>>>", req.params.id);
   try {
     const onePost = await postModel.findById(req.params.id).populate("userId");
     res.status(200).json(onePost);
@@ -105,14 +106,22 @@ router.patch(
     }
   }
 );
-
+router.get("/posts/market/:limit", async (req, res, next) => {
+  try {
+    const posts = await postModel
+      .find()
+      .limit(req.params.limit)
+      .populate("userId");
+    res.status(200).json(posts);
+  } catch (e) {
+    next(e);
+  }
+});
 // DELETE
 router.post("/posts/delete/:id", async (req, res) => {
   try {
-    console.log("Post delete req.params.id : >>>>>", req.params.id);
-    const postToDelete = await postModel.findByIdAndRemove(req.params.id);
-    const posts = await postModel.find()
-    console.log(posts)
+    await postModel.findByIdAndRemove(req.params.id);
+    const posts = await postModel.find();
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
@@ -130,8 +139,6 @@ router.get("/posts/comments/:id", async (req, res) => {
         path: "userId",
       },
     });
-    // const sss = comments.comments.populate("userId");
-    console.log("Comment : get >>>>>", comments);
     res.status(200).json(comments);
   } catch (error) {
     console.error(error);
@@ -162,14 +169,12 @@ router.patch("/posts/comments/:id", async (req, res, next) => {
       });
     res.status(201).json(updatedPost);
   } catch (error) {
-    console.log("Wrong way", error);
     next(error);
   }
 });
 
 // DELETE(UPDATE) - COMMENT
 router.patch("/posts/comments/delete/:id", async (req, res) => {
-  console.log("Comment delete req.params.id >>>>>", req.params.id); //should be post id
   try {
     const commentToDelete = await postModel.findByIdAndUpdate(
       req.params.id,
@@ -189,50 +194,60 @@ router.patch("/posts/comments/delete/:id", async (req, res) => {
 // ⬇︎⬇︎⬇︎⬇︎⬇︎　LIKES ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
 
 // GET - LIKE
-router.get("/posts/likes/:id", async (req, res) => {
+router.get("/posts/likes/:id/:userId", async (req, res) => {
   try {
-    const likes = await postModel.findById(req.params.id);
-    console.log("LIKE : get >>>>>", likes);
-    res.status(200).json(likes.likes);
+    const addedLike = await postModel.findOne({
+      _id: req.params.id,
+      likes: { $in: req.params.userId },
+    });
+
+    if (!addedLike) {
+      res.status(201).json({ likeAdded: false });
+    } else {
+      res.status(201).json({ likeAdded: true });
+    }
   } catch (error) {
     console.error(error);
   }
 });
 
-// ADD - LIKE
-router.patch("/posts/likes/addlike/:id", async (req, res, next) => {
+// ADD (PATCH) - LIKE
+router.patch("/posts/likes/:id", async (req, res, next) => {
   try {
-    const foundLike = await postModel.findOne({
-      _id: req.body.postId,
-      likes: { $in: req.body.currentUserId },
+    const addedLike = await postModel.findOne({
+      _id: req.params.id,
+      likes: { $in: req.body.userId },
     });
-    if (foundLike) {
-      // UNLIKE
-      await postModel.findByIdAndUpdate(
-        req.body.postId,
+    console.log(addedLike);
+
+    if (!addedLike) {
+      const post = await postModel.findByIdAndUpdate(
+        req.params.id,
         {
-          $pull: { likes: req.body.currentUserId },
+          $push: {
+            likes: req.body.userId,
+          },
         },
         {
           new: true,
         }
       );
-      res.status(201).json({ likeAdded: false });
+      res.status(201).json({ likeAdded: true, post });
     } else {
-      // LIKE
-      await postModel.findByIdAndUpdate(
-        req.body.postId,
+      const post = await postModel.findByIdAndUpdate(
+        req.params.id,
         {
-          $push: { likes: req.body.currentUserId },
+          $pull: {
+            likes: req.body.userId,
+          },
         },
-        {
-          new: true,
-        }
+        { new: true }
       );
-      res.status(201).json({ likeAdded: true });
+      res.status(201).json({ likeAdded: false, post });
     }
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    console.log("Wrong way", error);
+    next(error);
   }
 });
 

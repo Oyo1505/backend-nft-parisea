@@ -24,20 +24,29 @@ app.get("/", (req, res) => {
 //------
 // ROUTES
 // ----
+const postsRouter = require("./routes/posts");
+const wishlistsRouter = require("./routes/wishlist");
 const usersRouter = require("./routes/users");
 const nftsRouter = require("./routes/nfts");
 const loginRouter = require("./routes/auth");
+app.use("/", postsRouter);
+app.use("/", wishlistsRouter);
 app.use("/", nftsRouter);
-app.use("/", require("./routes/posts"));
-
 app.use("/", usersRouter);
 app.use("/", loginRouter);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
+app.use("/api/*", (req, res, next) => {  
+  const error = new Error("Ressource not found.");
+  error.status = 404;
+  next(error);
 });
-
+if (process.env.NODE_ENV === "production") {
+  app.use("*", (req, res, next) => {
+    // If no routes match, send them the React HTML.
+    res.sendFile(path.join(__dirname, "public/index.html"));
+  });
+}
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
