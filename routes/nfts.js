@@ -47,8 +47,8 @@ router.get("/nfts/market/:limit", async (req, res, next) => {
     const nfts = await nftModel
       .find({ sold: false })
       .limit(req.params.limit)
-      .populate("creator")
-      .sort("descending");
+      .populate("creator");
+    nfts.reverse();
     res.status(200).json(nfts);
   } catch (e) {
     next(e);
