@@ -72,10 +72,8 @@ router.get("/random-nft", async (req, res, next) => {
 router.get("/list-nfts/:mode/:id", async (req, res, next) => {
   const { mode, id } = req.params;
   try {
-    const nfts = await nftModel
-      .find({ [mode]: id })
-      .populate("creator")
-      .sort();
+    const nfts = await nftModel.find({ [mode]: id }).populate("creator");
+    nfts.reverse();
     res.status(200).json(nfts);
   } catch (e) {
     next(e);
