@@ -1,11 +1,10 @@
 const router = require("express").Router();
 const nftModel = require("../models/Nft");
-const userModel = require("../models/user");
-const { Types } = require("mongoose");
 
 // ⬇︎⬇︎⬇︎⬇︎⬇︎　WISHLIST PAGE  ⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎⬇︎
 
 // ADD IN WISHLIST LIST (UPDATE NFT MODEL)
+
 router.patch("/wishlist/:id/:userId", async (req, res, next) => {
   // console.log("req.params.id >>>", req.params.id);
   // console.log("Wishlist : User Id >>>>>", req.body.userId);
@@ -48,12 +47,12 @@ router.patch("/wishlist/:id/:userId", async (req, res, next) => {
 });
 
 // DISPLAY MY WISHLIST
+
 router.get("/wishlist/:userId", async (req, res) => {
   try {
     const addedWishlist = await nftModel.find({ wishlists: req.params.userId });
-    console.log("My id >>> ", req.params.userId);
-
-    console.log("Wishlist : get >>>>>", addedWishlist);
+    // console.log("My id >>> ", req.params.userId);
+    // console.log("Wishlist : get >>>>>", addedWishlist);
     res.status(200).json(addedWishlist);
   } catch (error) {
     console.error(error);
@@ -63,25 +62,28 @@ router.get("/wishlist/:userId", async (req, res) => {
 // DELETE(UPDATE) FROM MY WISHLIST
 router.patch("/wishlist/delete/:id/:userId", async (req, res) => {
   try {
+    // console.log("NFT id", req.params.id);
+    // console.log("User id", req.params.userId);
+
     const foundedNft = await nftModel.findOne({
       _id: req.params.id,
-      wishlists: req.body.userId,
+      wishlists: req.params.userId,
     });
-    console.log("Founded Nft >>>", foundedNft);
+
+    // console.log("Founded Nft >>>", foundedNft);
 
     await nftModel.findByIdAndUpdate(
       req.params.id,
       {
         $pull: {
-          wishlists: req.body.userId,
+          wishlists: req.params.userId,
         },
       },
       { new: true }
     );
-    res.status(201).json(nft);
+    res.status(201).json(foundedNft);
   } catch (error) {
     console.log("Wrong way", error);
-    next(error);
   }
 });
 

@@ -13,10 +13,24 @@ router.get("/nfts", async (req, res, next) => {
   }
 });
 //return Single nft
-router.get("/nfts/:id", async (req, res, next) => {
+router.get("/nfts/:id/:userId", async (req, res, next) => {
   try {
+    // console.log("nft id", req.params.id);
+    // console.log("user id", req.params.userId);
+
     const nft = await nftModel.findById(req.params.id).populate("creator");
-    res.status(200).json(nft);
+
+    const isItInsideWishlist = await nftModel.findOne({
+      _id: req.params.id,
+      wishlists: { $in: req.params.userId },
+    });
+    // console.log(nft.wishlists);
+
+    if (!isItInsideWishlist) {
+      res.status(201).json({ nft, cartAdded: false });
+    } else {
+      res.status(201).json({ nft, cartAdded: true });
+    }
   } catch (e) {
     next(e);
   }
