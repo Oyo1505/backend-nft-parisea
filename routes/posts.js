@@ -106,18 +106,19 @@ router.patch(
     }
   }
 );
+
 router.get("/posts/market/:limit", async (req, res, next) => {
   try {
     const posts = await postModel
       .find()
       .limit(req.params.limit)
       .populate("userId");
-    console.log("SALUT LA COMPAGNIE", posts);
     res.status(200).json(posts);
   } catch (e) {
     next(e);
   }
 });
+
 // DELETE
 router.post("/posts/delete/:id", async (req, res) => {
   try {
