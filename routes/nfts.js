@@ -38,7 +38,11 @@ router.get("/nfts/:id/:userId", async (req, res, next) => {
 //get a  NFTs to Marketplace
 router.get("/nfts/market/:limit", async (req, res, next) => {
   try {
-    const nfts = await nftModel.find({ sold: false }).limit(req.params.limit);
+    const nfts = await nftModel
+      .find({ sold: false })
+      .limit(req.params.limit)
+      .sort("ascending")
+      .populate("creator");
     res.status(200).json(nfts);
   } catch (e) {
     next(e);
@@ -62,7 +66,7 @@ router.get("/random-nft", async (req, res, next) => {
 router.get("/list-nfts/:mode/:id", async (req, res, next) => {
   const { mode, id } = req.params;
   try {
-    const nfts = await nftModel.find({ [mode]: id });
+    const nfts = await nftModel.find({ [mode]: id }).populate("creator");
     res.status(200).json(nfts);
   } catch (e) {
     next(e);
