@@ -13,7 +13,16 @@ router.get("/nfts", async (req, res, next) => {
   }
 });
 //return Single nft
-router.get("/nfts/:id/:userId", async (req, res, next) => {
+router.get("/nfts/:id", async (req, res, next) => {
+  try {
+    const nft = await nftModel.findById(req.params.id).populate("creator");
+    res.status(200).json(nft);
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.get("/nfts/single/:id/:userId", async (req, res, next) => {
   try {
     // console.log("nft id", req.params.id);
     // console.log("user id", req.params.userId);
@@ -35,6 +44,7 @@ router.get("/nfts/:id/:userId", async (req, res, next) => {
     next(e);
   }
 });
+
 //get a  NFTs to Marketplace
 router.get("/nfts/market/:limit", async (req, res, next) => {
   try {
