@@ -39,6 +39,7 @@ router.get("/nfts/single/:id/:userId", async (req, res, next) => {
     next(e);
   }
 });
+
 //get a  NFTs to Marketplace
 router.get("/nfts/market/:limit", async (req, res, next) => {
   try {
@@ -179,4 +180,5 @@ router.post("/nfts/delete/:id", async (req, res, next) => {
     next(e);
   }
 });
+
 module.exports = router;
