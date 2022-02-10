@@ -5,6 +5,7 @@ var express = require("express");
 var app = express();
 const cors = require("cors");
 app.use(express.json());
+const path = require("path");
 
 const corsOptions = {
   origin: process.env.CLIENT_URL,
