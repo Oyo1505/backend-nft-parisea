@@ -7,7 +7,7 @@ const cors = require("cors");
 app.use(express.json());
 const path = require("path");
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public/build")));
 
 const corsOptions = {
   origin: process.env.CLIENT_URL,
@@ -45,11 +45,12 @@ app.use("/api/*", (req, res, next) => {
   next(error);
 });
 
-app.use("/*", (req, res, next) => {
-  // If no routes match, send them the React HTML.
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
+if (process.env.NODE_ENV === "production") {
+  app.use("/*", (req, res, next) => {
+    // If no routes match, send them the React HTML.
+    res.sendFile(path.join(__dirname, "public/build/index.html"));
+  });
+}
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
