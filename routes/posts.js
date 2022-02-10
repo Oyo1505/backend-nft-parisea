@@ -106,7 +106,6 @@ router.patch(
     }
   }
 );
-
 router.get("/posts/market/:limit", async (req, res, next) => {
   try {
     const posts = await postModel
@@ -118,7 +117,6 @@ router.get("/posts/market/:limit", async (req, res, next) => {
     next(e);
   }
 });
-
 // DELETE
 router.post("/posts/delete/:id", async (req, res) => {
   try {
