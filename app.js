@@ -45,12 +45,11 @@ app.use("/api/*", (req, res, next) => {
   next(error);
 });
 
-if (process.env.NODE_ENV === "production") {
-  app.use("/*", (req, res, next) => {
-    // If no routes match, send them the React HTML.
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-  });
-}
+app.use("/*", (req, res, next) => {
+  // If no routes match, send them the React HTML.
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
