@@ -112,6 +112,7 @@ router.get("/posts/market/:limit", async (req, res, next) => {
       .find()
       .limit(req.params.limit)
       .populate("userId");
+    console.log("SALUT LA COMPAGNIE", posts);
     res.status(200).json(posts);
   } catch (e) {
     next(e);
