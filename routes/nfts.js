@@ -12,16 +12,6 @@ router.get("/nfts", async (req, res, next) => {
     next(e);
   }
 });
-//return Single nft
-router.get("/nfts/:id", async (req, res, next) => {
-  try {
-    const nft = await nftModel.findById(req.params.id).populate("creator");
-    res.status(200).json(nft);
-  } catch (e) {
-    next(e);
-  }
-});
-
 router.get("/nfts/single/:id/:userId", async (req, res, next) => {
   try {
     const nft = await nftModel.findById(req.params.id).populate("creator");
@@ -35,6 +25,17 @@ router.get("/nfts/single/:id/:userId", async (req, res, next) => {
     } else {
       res.status(201).json({ nft, cartAdded: true });
     }
+  } catch (e) {
+    next(e);
+  }
+});
+
+//return Single nft
+router.get("/nfts/:id", async (req, res, next) => {
+  try {
+    console.log("ddd");
+    const nft = await nftModel.findById(req.params.id).populate("creator");
+    res.status(200).json(nft);
   } catch (e) {
     next(e);
   }
@@ -112,6 +113,7 @@ router.patch("/buy-nft/:id/:userId", async (req, res, next) => {
     nft.sold = true;
     nft.seller = buyer._id;
     buyer.balance = buyer.balance - nft.price;
+    nft.creator.balance = nft.creator.balance + nft.price;
     await nftModel.findByIdAndUpdate(nft._id, nft, { new: true });
     await userModel.findByIdAndUpdate(buyer._id, buyer, { new: true });
     res.status(200).json({ nft, buyer });
