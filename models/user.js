@@ -13,8 +13,6 @@ const userSchema = new Schema({
   },
   id_metamask: {
     type: String,
-    unique: true,
-    required: true,
   },
   name: {
     type: String,
@@ -69,7 +67,6 @@ const userSchema = new Schema({
   bio: String,
   balance: {
     type: Number,
-    required: true,
   },
 });
 
