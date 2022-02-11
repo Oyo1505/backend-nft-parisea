@@ -14,6 +14,7 @@ router.get("/posts/mypost/:id", async (req, res) => {
         userId: req.params.id,
       })
       .populate("userId");
+    console.log(posts);
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
@@ -37,14 +38,13 @@ router.post(
   "/posts/create",
   uploader.single("image"),
   async (req, res, next) => {
-   
     const image =
       req.file?.path ||
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTsidAbaLbPxZTeyE2TKH5ozutkieNJvJSEQ&usqp=CAU";
-     
-      try {
+
+    try {
       const createdPost = await postModel.create({ ...req.body, image });
-      
+
       res.status(201).json(createdPost);
     } catch (error) {
       next(error);
@@ -108,9 +108,12 @@ router.patch(
 );
 
 router.get("/posts/market/:limit", async (req, res, next) => {
- 
   try {
-    const posts = await postModel.find().limit(req.params.limit).populate("userId");
+    const posts = await postModel
+      .find()
+      .limit(req.params.limit)
+      .populate("userId");
+    posts.reverse();
     res.status(200).json(posts);
   } catch (e) {
     next(e);
@@ -121,7 +124,7 @@ router.get("/posts/market/:limit", async (req, res, next) => {
 router.post("/posts/delete/:id", async (req, res) => {
   try {
     await postModel.findByIdAndRemove(req.params.id);
-    const posts = await postModel.find()
+    const posts = await postModel.find();
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
@@ -213,9 +216,6 @@ router.get("/posts/likes/:id/:userId", async (req, res) => {
 
 // ADD (PATCH) - LIKE
 router.patch("/posts/likes/:id", async (req, res, next) => {
-  console.log("Like : post id >>>>>", req.params.id);
-  console.log("Like : user id >>>>>", req.body.userId);
-
   try {
     const addedLike = await postModel.findOne({
       _id: req.params.id,
