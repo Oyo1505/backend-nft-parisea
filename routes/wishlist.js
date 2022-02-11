@@ -39,7 +39,6 @@ router.patch("/wishlist/:id/:userId", async (req, res, next) => {
       res.status(201).json({ cartAdded: false, nft });
     }
   } catch (error) {
-    console.log("Wrong way", error);
     next(error);
   }
 });
@@ -58,7 +57,7 @@ router.get("/wishlist/:userId", async (req, res) => {
 });
 
 // DELETE(UPDATE) FROM MY WISHLIST
-router.patch("/wishlist/delete/:id/:userId", async (req, res) => {
+router.patch("/wishlist/delete/:id/:userId", async (req, res, next) => {
   try {
     const foundedNft = await nftModel.findOne({
       _id: req.params.id,
@@ -75,7 +74,7 @@ router.patch("/wishlist/delete/:id/:userId", async (req, res) => {
     );
     res.status(201).json(foundedNft);
   } catch (error) {
-    console.log("Wrong way", error);
+    next(error);
   }
 });
 
