@@ -16,15 +16,12 @@ const userSchema = new Schema({
   },
   name: {
     type: String,
-    default: "undefined",
+    default: "popo",
   },
   userName: {
     type: String,
-    unique: true,
   },
-  email: {
-    type: String,
-  },
+
   following: [
     {
       type: Schema.Types.ObjectId,
