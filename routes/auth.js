@@ -10,14 +10,12 @@ router.get("/connect-wallet/:id", async (req, res, next) => {
     next(e);
   }
 });
-
 router.post("/connect-wallet/:id", async (req, res, next) => {
   try {
     const newUser = {};
     const foundUser = await userModel.findOne({
       id_metamask: req.params.id,
     });
-
     if (foundUser) {
       res.status(200).json(foundUser);
     } else {
