@@ -7,6 +7,7 @@ const uploader = require("../config/cloudinary");
 router.get("/nfts", async (req, res, next) => {
   try {
     const nfts = await nftModel.find().populate("creator");
+    nfts.reverse();
     res.status(200).json(nfts);
   } catch (e) {
     next(e);
