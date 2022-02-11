@@ -1,5 +1,5 @@
 require("dotenv").config();
-require("./config/mongo");
+require("./config/mongo"); 
 var createError = require("http-errors");
 var express = require("express");
 var app = express();
