@@ -105,13 +105,13 @@ router.patch("/resell-nft/:id", async (req, res, next) => {
 //Buy an NFT
 router.patch("/buy-nft/:id/:userId", async (req, res, next) => {
   try {
-    const nft = await nftModel.findById(req.params.id).populate("creator");
+    const nft = await nftModel.findById(req.params.id).populate("seller");
     const buyer = await userModel.findById(req.params.userId);
     nft.owner = buyer._id;
     nft.sold = true;
     nft.seller = buyer._id;
     buyer.balance = buyer.balance - nft.price;
-    nft.creator.balance = nft.creator.balance + nft.price;
+    console.log(nft.seller.balance);
     await nftModel.findByIdAndUpdate(nft._id, nft, { new: true });
     await userModel.findByIdAndUpdate(buyer._id, buyer, { new: true });
     res.status(200).json({ nft, buyer });
@@ -124,8 +124,7 @@ router.post(
   "/nfts/create-item",
   uploader.single("image"),
   async (req, res, next) => {
-    const { title, description, seller, owner, price, creator, sold } =
-      req.body;
+    const { title, description, seller, owner, price, creator } = req.body;
     try {
       if (req.file) {
         const image = req.file.path || undefined;
