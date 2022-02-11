@@ -25,7 +25,7 @@ app.use(cors(corsOptions));
 //   res.send("backend server is running");
 // });
 //------
-// ROUTES
+// ROUTESdd
 // ----
 const postsRouter = require("./routes/posts");
 const wishlistsRouter = require("./routes/wishlist");
