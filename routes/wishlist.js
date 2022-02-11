@@ -12,26 +12,30 @@ router.patch("/wishlist/:id/:userId", async (req, res, next) => {
       wishlists: req.body.userId,
     });
     if (!foundedNft) {
-      const nft = await nftModel.findByIdAndUpdate(
-        req.params.id,
-        {
-          $push: {
-            wishlists: req.body.userId,
+      const nft = await nftModel
+        .findByIdAndUpdate(
+          req.params.id,
+          {
+            $push: {
+              wishlists: req.body.userId,
+            },
           },
-        },
-        { new: true }
-      );
+          { new: true }
+        )
+        .populate("creator");
       res.status(201).json({ cartAdded: true, nft });
     } else {
-      const nft = await nftModel.findByIdAndUpdate(
-        req.params.id,
-        {
-          $pull: {
-            wishlists: req.body.userId,
+      const nft = await nftModel
+        .findByIdAndUpdate(
+          req.params.id,
+          {
+            $pull: {
+              wishlists: req.body.userId,
+            },
           },
-        },
-        { new: true }
-      );
+          { new: true }
+        )
+        .populate("creator");
       res.status(201).json({ cartAdded: false, nft });
     }
   } catch (error) {
