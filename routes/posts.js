@@ -8,13 +8,12 @@ const { Types } = require("mongoose");
 // DISPLAY ONLY MY POSTS
 router.get("/posts/mypost/:id", async (req, res) => {
   try {
-    console.log(req.params.id);
     const posts = await postModel
       .find({
         userId: req.params.id,
       })
       .populate("userId");
-    console.log(posts);
+
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
@@ -221,7 +220,6 @@ router.patch("/posts/likes/:id", async (req, res, next) => {
       _id: req.params.id,
       likes: { $in: req.body.userId },
     });
-    console.log(addedLike);
 
     if (!addedLike) {
       const post = await postModel.findByIdAndUpdate(
@@ -249,7 +247,6 @@ router.patch("/posts/likes/:id", async (req, res, next) => {
       res.status(201).json({ likeAdded: false, post });
     }
   } catch (error) {
-    console.log("Wrong way", error);
     next(error);
   }
 });
