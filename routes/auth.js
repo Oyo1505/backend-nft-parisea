@@ -20,7 +20,6 @@ router.post("/connect-wallet/:id", async (req, res, next) => {
       res.status(200).json(foundUser);
     } else {
       newUser.id_metamask = req.params.id;
-      newUser.balance = 100;
       const user = await userModel.create(newUser);
       res.status(200).json(user);
     }

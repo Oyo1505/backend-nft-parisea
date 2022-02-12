@@ -20,6 +20,7 @@ const userSchema = new Schema({
   },
   userName: {
     type: String,
+    default: "popo",
   },
 
   following: [
@@ -64,6 +65,7 @@ const userSchema = new Schema({
   bio: String,
   balance: {
     type: Number,
+    default: 100,
   },
 });
 
