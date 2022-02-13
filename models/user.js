@@ -14,15 +14,16 @@ const userSchema = new Schema({
   id_metamask: {
     type: String,
   },
+  email: {
+    type: String,
+  },
   name: {
     type: String,
-    default: "popo",
   },
   userName: {
     type: String,
-    default: "popo",
+    unique: true,
   },
-
   following: [
     {
       type: Schema.Types.ObjectId,

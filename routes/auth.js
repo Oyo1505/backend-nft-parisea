@@ -19,7 +19,9 @@ router.post("/connect-wallet/:id", async (req, res, next) => {
     if (foundUser) {
       res.status(200).json(foundUser);
     } else {
+      console.log(req.body);
       newUser.id_metamask = req.params.id;
+      newUser.userName = "tes";
       const user = await userModel.create(newUser);
       res.status(200).json(user);
     }

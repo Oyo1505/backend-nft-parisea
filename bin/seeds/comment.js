@@ -20,7 +20,7 @@ const comments = [
     userPfp:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlvCJ44jSvkr8W9bYID4eqPeoJctZjBULPDg&usqp=CAU",
     text: "Congrats!",
-    commentedTime: "2022-02-05",
+    commentedTime: "2022-02-06",
   },
 ];
 
