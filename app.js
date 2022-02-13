@@ -18,9 +18,9 @@ app.use(express.urlencoded({ extended: false }));
 // cors middle on
 app.use(cors(corsOptions));
 //BACK END
-app.get("/", (req, res) => {
-  res.send("backend server is running");
-});
+// app.get("/", (req, res) => {
+//   res.send("backend server is running");
+// });
 //------
 // ROUTES
 // ----
