@@ -5,6 +5,10 @@ var express = require("express");
 var app = express();
 const cors = require("cors");
 app.use(express.json());
+const path = require("path");
+//
+
+app.use(express.static(path.join(__dirname, "public/build")));
 
 const corsOptions = {
   origin: process.env.CLIENT_URL,
@@ -22,7 +26,7 @@ app.use(cors(corsOptions));
 //   res.send("backend server is running");
 // });
 //------
-// ROUTES
+// ROUTESdd
 // ----
 const postsRouter = require("./routes/posts");
 const wishlistsRouter = require("./routes/wishlist");
@@ -41,10 +45,11 @@ app.use("/api/*", (req, res, next) => {
   error.status = 404;
   next(error);
 });
+
 if (process.env.NODE_ENV === "production") {
-  app.use("*", (req, res, next) => {
+  app.use("/*", (req, res, next) => {
     // If no routes match, send them the React HTML.
-    res.sendFile(path.join(__dirname, "public/index.html"));
+    res.sendFile(path.join(__dirname, "public/build/index.html"));
   });
 }
 // error handler
