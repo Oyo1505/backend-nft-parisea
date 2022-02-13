@@ -1,11 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.556b1f36.css",
-<<<<<<< HEAD:public/build/asset-manifest.json
-    "main.js": "/static/js/main.f3240c34.js",
-=======
     "main.js": "/static/js/main.4135ad47.js",
->>>>>>> 8f3f59907db5047d4a544279b8c5e36f97d06670:public/build/asset-manifest.json
     "static/media/gifLogo.gif": "/static/media/gifLogo.517d2504f49d5ceaba81.gif",
     "static/media/ClashGrotesk-Variable.ttf": "/static/media/ClashGrotesk-Variable.6eccb344b604e67e2145.ttf",
     "static/media/ClashGrotesk-Medium.ttf": "/static/media/ClashGrotesk-Medium.b069c91b9e31d834f2d9.ttf",
@@ -30,18 +26,10 @@
     "static/media/ClashGrotesk-Extralight.woff2": "/static/media/ClashGrotesk-Extralight.20c0ab584230daf91a5e.woff2",
     "index.html": "/index.html",
     "main.556b1f36.css.map": "/static/css/main.556b1f36.css.map",
-<<<<<<< HEAD:public/build/asset-manifest.json
-    "main.f3240c34.js.map": "/static/js/main.f3240c34.js.map"
-  },
-  "entrypoints": [
-    "static/css/main.556b1f36.css",
-    "static/js/main.f3240c34.js"
-=======
     "main.4135ad47.js.map": "/static/js/main.4135ad47.js.map"
   },
   "entrypoints": [
     "static/css/main.556b1f36.css",
     "static/js/main.4135ad47.js"
->>>>>>> 8f3f59907db5047d4a544279b8c5e36f97d06670:public/build/asset-manifest.json
   ]
 }
