@@ -1,12 +1,12 @@
 require("dotenv").config();
-require("./config/mongo"); 
+require("./config/mongo");
 var createError = require("http-errors");
 var express = require("express");
 var app = express();
 const cors = require("cors");
 app.use(express.json());
 const path = require("path");
-// 
+//
 
 app.use(express.static(path.join(__dirname, "public/build")));
 
