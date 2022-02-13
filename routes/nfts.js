@@ -14,7 +14,7 @@ router.get("/nfts", async (req, res, next) => {
   }
 });
 
-//return Single nft
+//return Single nftx
 router.get("/nfts/:id", async (req, res, next) => {
   try {
     const nft = await nftModel.findById(req.params.id).populate("creator");

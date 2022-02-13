@@ -1,7 +1,7 @@
 const { model, Schema } = require("mongoose");
-
+ 
 const nftSchema = new Schema({
-  title: String,
+  title: String, 
   description: String,
   image: { type: String, require: true },
   seller: { type: Schema.Types.ObjectId, ref: "user" },

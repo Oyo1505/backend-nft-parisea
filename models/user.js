@@ -13,20 +13,16 @@ const userSchema = new Schema({
   },
   id_metamask: {
     type: String,
-    unique: true,
-    required: true,
   },
   name: {
     type: String,
-    default: "undefined",
+    default: "popo",
   },
   userName: {
     type: String,
-    unique: true,
+    default: "popo",
   },
-  email: {
-    type: String,
-  },
+
   following: [
     {
       type: Schema.Types.ObjectId,
@@ -69,7 +65,7 @@ const userSchema = new Schema({
   bio: String,
   balance: {
     type: Number,
-    required: true,
+    default: 100,
   },
 });
 
